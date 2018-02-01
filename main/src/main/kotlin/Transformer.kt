@@ -10,8 +10,15 @@ class Transformer {
      * Flatten: Remove tree-like structure from program.
      * Will fail if program is not flattened.
      */
-    fun i1(p: Program) {
-        
+    fun i1(p: Program): CProgram {
+        return p.flatten()
+    }
+
+    /**
+     * Select:
+     */
+    fun i2(cP: CProgram): XProgram {
+
     }
 
     fun compile(p: Program) {
