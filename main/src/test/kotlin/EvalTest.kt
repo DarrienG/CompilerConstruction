@@ -5,11 +5,11 @@ class EvalTest {
     fun testAddNegLetVarNum() {
         val p = Program(Add(
                 Let("y",
-                Let(
-                        "x",
-                        Neg(Num(5)),
-                        Write(Var("x"))
-                ), Add(Var("x"), Num(5))),
+                        Let(
+                                "x",
+                                Neg(Num(5)),
+                                Write(Var("x"))
+                        ), Add(Var("x"), Num(5))),
                 Write(Var("y"))))
 
         val result = interpP(p)
@@ -37,5 +37,20 @@ class EvalTest {
         assert(interpP(p) == 39)
         p.uniquify()
         assert(interpP(p) == 39)
+    }
+
+    @Test
+    fun doTheThing() {
+        val p = Program(Add(
+                Let("y",
+                        Let(
+                                "x",
+                                Neg(Num(5)),
+                                Var("x")
+                        ), Add(Var("x"), Num(5))),
+                (Var("y"))))
+
+        Compiler().compile(p)
+        println(interpP(p))
     }
 }

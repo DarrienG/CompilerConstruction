@@ -1,6 +1,6 @@
 data class Num(private val n: Int) : Expr {
     override fun flatten(count: Counter): CProgram {
-        return CProgram(mutableListOf(), mutableListOf(), CNum(n))
+        return CProgram(hashSetOf(), mutableListOf(), CNum(n))
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
@@ -40,7 +40,7 @@ data class Add(private val l: Expr, private val r: Expr) : Expr {
         val newVal = "add_${count.count}"
         count.count += 1
 
-        val varList = mutableListOf<String>()
+        val varList = hashSetOf<String>()
         varList.addAll(cPL.varList)
         varList.addAll(cPR.varList)
         varList.add(newVal)
@@ -68,7 +68,7 @@ data class Let(private var x: String, private val xe: Expr, private val be: Expr
         val cPXE = xe.flatten(count)
         val cpBE = be.flatten(count)
 
-        val varList = mutableListOf<String>()
+        val varList = hashSetOf<String>()
         varList.addAll(cPXE.varList)
         varList.addAll(cpBE.varList)
         varList.add(x)
@@ -99,7 +99,7 @@ data class Let(private var x: String, private val xe: Expr, private val be: Expr
 
 data class Var(private var x: String) : Expr {
     override fun flatten(count: Counter): CProgram {
-        val varList = mutableListOf<String>()
+        val varList = hashSetOf<String>()
         varList.add(x)
         return CProgram(varList, mutableListOf(), CVar(x))
     }
@@ -128,7 +128,7 @@ class Read : Expr {
     override fun flatten(count: Counter): CProgram {
         val newVal = "rv_${count.count}"
         count.count += 1
-        return CProgram(mutableListOf(newVal), mutableListOf(CStmt(CVar(newVal), CRead())), CVar(newVal))
+        return CProgram(hashSetOf(newVal), mutableListOf(CStmt(CVar(newVal), CRead())), CVar(newVal))
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
