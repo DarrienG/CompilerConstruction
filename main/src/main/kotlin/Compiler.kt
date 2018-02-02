@@ -12,16 +12,31 @@ class Compiler {
     private fun i1(p: Program): CProgram =  p.flatten()
 
     /**
-     * Select:
+     * Select: Converts C0 program to almost valid assembly program with variables.
      */
     private fun i2(cP: CProgram): XProgram = cP.select()
 
+    /**
+     * Assign: Assigns variables to registers.
+     */
     private fun i3(xP: XProgram) = assign(xP)
 
+    /**
+     * Fix: Removes double register references in assembly code.
+     * @return Returns fully cooked x86 asm.
+     */
     private fun i4(xP: XProgram) = fix(xP)
 
-    private fun printAsm(asm: Asm) = asm.instr.forEach {print(it) }
+    /**
+     * Prints finished assembly.
+     */
+    private fun printAsm(asm: Asm) = asm.instr.forEach { print(it) }
 
+    /**
+     * Compiles a program to assembly.
+     * @param p Program to compile.
+     * @param verbose Show verbose output when compiling. Put anything in this param to make verbose.
+     */
     fun compile(p: Program, verbose: Any? = null) {
         verbose?.let { println("INPUT\n$p") }
         i0(p)

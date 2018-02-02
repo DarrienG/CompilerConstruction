@@ -1,22 +1,42 @@
+/**
+ * Argument valid for an C0 program statement.
+ */
 interface Argument {
     fun getVal(): Any
 }
+
+/**
+ * Valid expression for a C0 program.
+ */
 interface CExpr {
     fun select(xp: XProgram, arg: Argument)
 }
 
+/**
+ * Raw number in C0 program.
+ */
 data class CNum(private var n: Int = 314159): Argument {
     override fun getVal(): Any {
         return n
     }
 
 }
+
+/**
+ * Variable in C0 language.
+ * @param x Name of the variable.
+ */
 data class CVar(private var x: String): Argument {
     override fun getVal(): Any {
         return x
     }
 }
 
+/**
+ * Valid statement in the C0 language.
+ * @param x Variable where return data is held.
+ * @param xe Expression run.
+ */
 data class CStmt(var x: CVar, val xe: CExpr)
 
 data class CLet(private val a: Argument): CExpr {
@@ -60,6 +80,11 @@ data class CWrite(private var a: Argument): CExpr {
     }
 }
 
+/**
+ * Converts a generic CArg to a generic XArg.
+ * @param arg: CArgument to convert.
+ * @return Converted XArg.
+ */
 fun convertCArgToXArg(arg: Argument): XArg {
     return when(arg.getVal()) {
         is Int -> {
@@ -76,6 +101,9 @@ fun convertCArgToXArg(arg: Argument): XArg {
     }
 }
 
+/**
+ * A full C0 program.
+ */
 data class CProgram(val varList: HashSet<String>, val stmtList: MutableList<CStmt>, var arg: Argument) {
     fun select(): XProgram {
         val xp = XProgram(mutableListOf(), mutableListOf())

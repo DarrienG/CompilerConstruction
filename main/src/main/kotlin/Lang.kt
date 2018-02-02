@@ -165,8 +165,19 @@ class Write(private var x: Var) : Expr {
 }
 
 interface Expr {
+    /**
+     * Evaluates expression in interpreter.
+     */
     fun eval(env: HashMap<String, Int>): Int
+
+    /**
+     * Makes all variables in program unique.
+     */
     fun uniquify(env: HashMap<String, String>, count: Counter)
+
+    /**
+     * Turns tree-like program into list-like program.
+     */
     fun flatten(count: Counter): CProgram
 }
 
