@@ -18,6 +18,7 @@ class EvalTest {
         assert(interpP(p) == -5)
         val c = p.flatten()
         println(c)
+        Compiler().compile(p)
 
     }
 
@@ -41,14 +42,8 @@ class EvalTest {
 
     @Test
     fun doTheThing() {
-        val p = Program(Add(
-                Let("y",
-                        Let(
-                                "x",
-                                Neg(Num(5)),
-                                Var("x")
-                        ), Add(Var("x"), Num(5))),
-                (Var("y"))))
+        val p = Program(Let("x", Add(Num(5), Num(10)),
+                Add(Var("x"), Num(13))))
 
         Compiler().compile(p)
         println(interpP(p))

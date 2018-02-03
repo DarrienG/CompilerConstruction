@@ -80,9 +80,8 @@ data class CProgram(val varList: HashSet<String>, val stmtList: MutableList<CStm
     fun select(): XProgram {
         val xp = XProgram(mutableListOf(), mutableListOf())
         varList.forEach { xp.varList.add(XVar(it)) }
-        stmtList.forEach {
-            it.xe.select(xp, it.x)
-        }
+        stmtList.forEach { it.xe.select(xp, it.x) }
+        xp.instrList.add(XMovq(convertCArgToXArg(arg), XReg("rax")))
         return xp
     }
 }

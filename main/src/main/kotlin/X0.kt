@@ -220,7 +220,6 @@ fun assign(xp: XProgram) {
     varAssign.add(XRaw(".globl _main"))
     varAssign.add(XRaw("_main:"))
     varAssign.add(XSubq(XInt(8 * offsetMap.size), XReg("rsp")))
-    varAssign.add(XAddq(XInt(8 * offsetMap.size), XReg("rsp")))
 
     xp.instrList.forEach {
         it.convVar(offsetMap)
@@ -228,6 +227,7 @@ fun assign(xp: XProgram) {
 
     xp.instrList.addAll(0, varAssign)
 
+    xp.instrList.add(XAddq(XInt(8 * offsetMap.size), XReg("rsp")))
     xp.instrList.add(XRetq())
 }
 
