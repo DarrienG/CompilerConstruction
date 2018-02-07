@@ -16,4 +16,4 @@ support.s: support.c
 	$(CC) $(CFLAGS) support.c -o $(ASM)
 
 clean:
-	rm -f support.s
+	rm -f test.s support.s pls

@@ -55,7 +55,7 @@ class CRead: CExpr {
 data class CWrite(private var a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
         val sentArg = convertCArgToXArg(a)
-        xp.instrList.add(XPushq(sentArg))
+        xp.instrList.add(XMovq(sentArg, XReg("rdi")))
         xp.instrList.add(XCallq(XLabel("_print")))
     }
 }
