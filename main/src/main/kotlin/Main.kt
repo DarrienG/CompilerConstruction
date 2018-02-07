@@ -1,6 +1,7 @@
 fun main(args: Array<String>) {
-    Compiler().compile(Program(Let("x", Num(5),
-            Let("y", Add(Var("x"), Num(22)), Write(Var("y"))))))
+    val p = Program(Write(Add(Num(5), Num(32))))
+    println(interpP(p))
+    Compiler().compile(p)
 }
 
 fun interpP(program: Program): Int {

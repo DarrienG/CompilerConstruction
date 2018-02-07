@@ -217,9 +217,19 @@ fun assign(xp: XProgram) {
     }
 
     val varAssign = mutableListOf<Instruction>()
+
     varAssign.add(XRaw(".globl _main"))
     varAssign.add(XRaw("_main:"))
-    varAssign.add(XSubq(XInt(8 * offsetMap.size), XReg("rsp")))
+    varAssign.add(XPushq(XReg("rbp")))
+    varAssign.add(XMovq(XReg("rsp"), XReg("rbp")))
+
+    // FUCK OS X
+    var size = offsetMap.size * 8
+    if (size % 16 != 0)  {
+        size += 8
+    }
+
+    varAssign.add(XSubq(XInt(size), XReg("rsp")))
 
     xp.instrList.forEach {
         it.convVar(offsetMap)
@@ -227,7 +237,9 @@ fun assign(xp: XProgram) {
 
     xp.instrList.addAll(0, varAssign)
 
-    xp.instrList.add(XAddq(XInt(8 * offsetMap.size), XReg("rsp")))
+    xp.instrList.add(XAddq(XInt(size), XReg("rsp")))
+    xp.instrList.add(XMovq(XReg("rbp"), XReg("rsp")))
+    xp.instrList.add(XPopq(XReg("rbp")))
     xp.instrList.add(XRetq())
 }
 

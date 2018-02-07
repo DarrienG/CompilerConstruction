@@ -144,7 +144,7 @@ class Read : Expr {
     }
 }
 
-class Write(private var x: Var) : Expr {
+class Write(private var x: Expr) : Expr {
     override fun flatten(count: Counter): CProgram {
         val cP = x.flatten(count)
         cP.stmtList.add(CStmt(CVar(cP.arg.getVal() as String), CWrite(cP.arg)))

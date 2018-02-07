@@ -1,4 +1,4 @@
-CC=gcc
+CC=gcc-7
 CFLAGS=-O0 -g -S -std=c99 -ansi -pedantic
 ASM=support.s
 
