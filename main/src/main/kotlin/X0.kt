@@ -10,7 +10,7 @@ data class XReg(val x: String): XArg {
         return "%$x"
     }
 }
-data class XOffset(private val reg: XReg, val offset: Int): XArg {
+data class XOffset(private val reg: XReg, private val offset: Int): XArg {
     override fun toString(): String {
         return "$offset(%${reg.x})"
     }

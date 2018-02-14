@@ -1,7 +1,6 @@
 fun main(args: Array<String>) {
-    val p = Program(Write(Add(Num(5), Num(32))))
-    println(interpP(p))
-    Compiler().compile(p, timed = true)
+    val p = powerOfTwoGenerator(13)
+    Compiler().compile(p, toFile = true, timed = true)
 }
 
 fun interpP(program: Program): Int {

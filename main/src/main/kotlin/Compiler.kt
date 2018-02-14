@@ -1,3 +1,4 @@
+import java.io.File
 import kotlin.system.measureTimeMillis
 
 class Compiler {
@@ -22,9 +23,22 @@ class Compiler {
 
     private fun i4(xP: XProgram) = fix(xP)
 
-    private fun printAsm(asm: Asm) = asm.instr.forEach {print(it) }
+    private fun printAsm(asm: Asm, toFile: Boolean = false) {
+        if (toFile) {
+            File("test.s").printWriter().use { out ->
+                asm.instr.forEach { out.write(it.toString()) }
+            }
+        }
+        else {
+            asm.instr.forEach { print(it) }
+        }
+    }
 
-    fun compile(p: Program, verbose: Any? = null, timed: Any? = null) {
+    fun compile(p: Program,
+                toFile: Boolean = false,
+                verbose: Any? = null,
+                timed: Any? = null) {
+
         verbose?.let { println("INPUT\n$p") }
         if (timed != null) {
             println("Uniquify timing: ${measureTimeMillis { i0(p) }}ms")
@@ -64,6 +78,6 @@ class Compiler {
         }
         verbose?.let { println("\nFIXED\n$xProgram") }
 
-        printAsm(asm)
+        printAsm(asm, toFile)
     }
 }
