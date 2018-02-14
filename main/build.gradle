@@ -32,3 +32,11 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'dist'
+        }
+    }
+}
