@@ -1,3 +1,5 @@
+import kotlin.system.measureTimeMillis
+
 class Compiler {
     /**
      * Uniquify: Remove all variable shadowing.
@@ -22,18 +24,46 @@ class Compiler {
 
     private fun printAsm(asm: Asm) = asm.instr.forEach {print(it) }
 
-    fun compile(p: Program, verbose: Any? = null) {
+    fun compile(p: Program, verbose: Any? = null, timed: Any? = null) {
         verbose?.let { println("INPUT\n$p") }
-        i0(p)
+        if (timed != null) {
+            println("Uniquify timing: ${measureTimeMillis { i0(p) }}ms")
+        } else {
+            i0(p)
+        }
         verbose?.let { println("\nUNIQUIFIED\n$p") }
-        val cProgram = i1(p)
+
+        var cProgram  = CProgram(hashSetOf(), mutableListOf(), CVar("null"))
+        if (timed != null) {
+            println("Flatten timing: ${measureTimeMillis { cProgram = i1(p) }}ms")
+        } else {
+            cProgram = i1(p)
+        }
         verbose?.let { println("\nFLATTENED\n$cProgram") }
-        val xProgram = i2(cProgram)
+
+        var xProgram = XProgram(mutableListOf(), mutableListOf())
+        if (timed != null) {
+            println("Select timing: ${measureTimeMillis { xProgram = i2(cProgram) }}ms")
+        } else {
+            xProgram = i2(cProgram)
+        }
         verbose?.let { println("\nSELECTED\n$xProgram") }
-        i3(xProgram)
+
+        if (timed != null) {
+            println("Assign timing: ${measureTimeMillis { i3(xProgram) }}ms")
+        } else {
+            i3(xProgram)
+        }
         verbose?.let { println("\nASSIGNED\n$xProgram") }
-        val asm = i4(xProgram)
+
+        var asm = Asm(mutableListOf())
+        if (timed != null) {
+            println("Fix timing: ${measureTimeMillis { asm = i4(xProgram) }}ms")
+        } else {
+            asm = i4(xProgram)
+        }
         verbose?.let { println("\nFIXED\n$xProgram") }
+
         printAsm(asm)
     }
 }

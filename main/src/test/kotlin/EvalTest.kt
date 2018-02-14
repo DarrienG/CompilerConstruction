@@ -18,7 +18,7 @@ class EvalTest {
         assert(interpP(p) == -5)
         val c = p.flatten()
         println(c)
-        Compiler().compile(p)
+        Compiler().compile(p, timed = true)
 
     }
 
@@ -38,6 +38,7 @@ class EvalTest {
         assert(interpP(p) == 39)
         p.uniquify()
         assert(interpP(p) == 39)
+        Compiler().compile(p, timed = true)
     }
 
     @Test
