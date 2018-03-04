@@ -19,7 +19,6 @@ class EvalTest {
         val c = p.flatten()
         println(c)
         Compiler().compile(p, timed = true)
-
     }
 
     @Test(expected = RuntimeException::class)

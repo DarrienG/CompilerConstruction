@@ -244,10 +244,8 @@ fun assign(xp: XProgram) {
 }
 
 fun fix(xp: XProgram): Asm {
+    println("X PROGRAM PRIOR TO ASM\n$xp")
     val asm = Asm(mutableListOf())
-    xp.varList.forEach {
-
-    }
     xp.instrList.forEach {
         it.emitFix()?.let { fix ->
             asm.instr.add(fix)

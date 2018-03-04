@@ -1,7 +1,7 @@
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-class Compiler {
+class Compiler() {
     /**
      * Uniquify: Remove all variable shadowing.
      */
@@ -15,17 +15,26 @@ class Compiler {
     private fun i1(p: Program): CProgram =  p.flatten()
 
     /**
-     * Select:
+     * Select: Convert CProgram [CProgram] to an accompanying XProgram [XProgram].
+     * New class is a mish mash of almost assembly instructions.
      */
     private fun i2(cP: CProgram): XProgram = cP.select()
 
+    /**
+     * Assigns all variables to assembly type "variables"
+     * Variables either become registers, or positions in the stack.
+     */
     private fun i3(xP: XProgram) = assign(xP)
 
+    /**
+     * Fixes illegal assembly instructions and returns a completed set of working
+     * assembly instructions in the form of an Asm [Asm] object.
+     */
     private fun i4(xP: XProgram) = fix(xP)
 
-    private fun printAsm(asm: Asm, toFile: Boolean = false) {
+    private fun printAsm(asm: Asm, toFile: Boolean = false, fileName: String = "test.s") {
         if (toFile) {
-            File("test.s").printWriter().use { out ->
+            File(fileName).printWriter().use { out ->
                 asm.instr.forEach { out.write(it.toString()) }
             }
         }

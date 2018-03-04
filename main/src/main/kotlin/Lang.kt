@@ -162,6 +162,9 @@ class Write(private var x: Expr) : Expr {
         return value
     }
 
+    override fun toString(): String {
+        return x.toString()
+    }
 }
 
 interface Expr {

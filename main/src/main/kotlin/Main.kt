@@ -1,5 +1,6 @@
 fun main(args: Array<String>) {
     val p = powerOfTwoGenerator(13)
+    println(p.toString())
     Compiler().compile(p, toFile = true, timed = true)
 }
 
