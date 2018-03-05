@@ -13,11 +13,7 @@ data class XReg(val x: String): XArg {
 
 data class XOffset(private val reg: XReg, private val offset: Int): XArg {
     override fun toString(): String {
-        return if (offset > 0) {
-            "$offset(%${reg.x})"
-        } else {
-            "%${reg.x}"
-        }
+        return "$offset(%${reg.x})"
     }
 }
 
