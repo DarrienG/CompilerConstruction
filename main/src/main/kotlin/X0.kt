@@ -79,8 +79,8 @@ data class XAddq(private var al: XArg, private var ar: XArg): Instruction {
         val lA = al
         val rA = ar
         // Using unsafe casts. If we fail, we messed up earlier and we deserve to fail.
-        if (lA is XVar) { regMap[lA]?.let { al = it } }
-        if (rA is XVar) { regMap[rA]?.let { ar = it } }
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
     }
 
     override fun toString(): String {
@@ -106,8 +106,8 @@ data class XSubq(private var al: XArg, private var ar: XArg): Instruction {
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val lA = al
         val rA = ar
-        if (lA is XVar) { regMap[lA]?.let { al = it } }
-        if (rA is XVar) { regMap[rA]?.let { ar = it } }
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
     }
 
     override fun toString(): String {
@@ -125,7 +125,7 @@ data class XCallq(private var a: XArg): Instruction {
 
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val xV = a
-        if (xV is XVar) { regMap[xV]?.let { a = it } }
+        regMap[xV]?.let { a = it }
     }
 
     override fun toString(): String {
@@ -151,8 +151,8 @@ data class XMovq(private var al: XArg, private var ar: XArg): Instruction {
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val lA = al
         val rA = ar
-        if (lA is XVar) { regMap[lA]?.let { al = it } }
-        if (rA is XVar) { regMap[rA]?.let { ar = it } }
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
     }
 
     override fun toString(): String {
@@ -170,7 +170,7 @@ data class XPushq(private var a: XArg): Instruction {
 
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val aV = a
-        if (aV is XVar) { regMap[aV]?.let { a = it } }
+        regMap[aV]?.let { a = it }
     }
 
     override fun toString(): String {
@@ -187,7 +187,7 @@ data class XNegq(private var a: XArg): Instruction {
 
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val aV = a
-        if (aV is XVar) { regMap[aV]?.let { a = it } }
+        regMap[aV]?.let { a = it }
     }
 
     override fun toString(): String {
@@ -205,7 +205,7 @@ data class XPopq(private var a: XArg): Instruction {
 
     override fun convVar(regMap: HashMap<XArg, XArg>) {
         val aV = a
-        if (aV is XVar) { regMap[aV]?.let { a = it } }
+        regMap[aV]?.let { a = it }
     }
 
     override fun toString(): String {
