@@ -18,7 +18,7 @@ class EvalTest {
         assert(interpP(p) == -5)
         val c = p.flatten()
         println(c)
-        Compiler().compile(p, timed = true)
+        Compiler().compile(p, timed = true, toFile = true)
     }
 
     @Test(expected = RuntimeException::class)
@@ -37,7 +37,7 @@ class EvalTest {
         assert(interpP(p) == 39)
         p.uniquify()
         assert(interpP(p) == 39)
-        Compiler().compile(p, timed = true)
+        Compiler().compile(p, timed = true, toFile = true)
     }
 
     @Test

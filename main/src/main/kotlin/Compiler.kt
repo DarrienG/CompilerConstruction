@@ -24,7 +24,7 @@ class Compiler() {
      * Assigns all variables to assembly type "variables"
      * Variables either become registers, or positions in the stack.
      */
-    private fun i3(xP: XProgram) = assign(xP)
+    private fun i3(xP: XProgram, numRegs: NumRegs) = assign(xP, numRegs)
 
     /**
      * Fixes illegal assembly instructions and returns a completed set of working
@@ -46,7 +46,8 @@ class Compiler() {
     fun compile(p: Program,
                 toFile: Boolean = false,
                 verbose: Any? = null,
-                timed: Any? = null) {
+                timed: Any? = null,
+                numRegs: NumRegs = NumRegs.CALLEE) {
 
         verbose?.let { println("INPUT\n$p") }
         if (timed != null) {
@@ -73,9 +74,9 @@ class Compiler() {
         verbose?.let { println("\nSELECTED\n$xProgram") }
 
         if (timed != null) {
-            println("Assign timing: ${measureTimeMillis { i3(xProgram) }}ms")
+            println("Assign timing: ${measureTimeMillis { i3(xProgram, numRegs) }}ms")
         } else {
-            i3(xProgram)
+            i3(xProgram, numRegs)
         }
         verbose?.let { println("\nASSIGNED\n$xProgram") }
 

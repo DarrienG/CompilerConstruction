@@ -6,14 +6,14 @@ import java.util.LinkedList
  * The user passes in a list of their data so we can initialize our adjacency list to the size of
  * the list of data.
  */
-internal class Graph<T>(private val dataList: List<T>) {
+internal class RegGraph<T>(private val dataList: List<T>) {
     /**
      * Adjacency list/
      */
-    private val adj: MutableList<LinkedList<Int>> = mutableListOf()
+    private val adj: MutableList<MutableSet<Int>> = mutableListOf()
 
     init {
-        (0 until dataList.size).mapTo(adj) { LinkedList() }
+        (0 until dataList.size).mapTo(adj) { mutableSetOf() }
     }
 
     /**
@@ -31,7 +31,7 @@ internal class Graph<T>(private val dataList: List<T>) {
     /**
      * COLOR AWAY MY DUDES
      */
-    fun greedyColoring(debug: Any? = null): IntArray {
+    fun colorAwayMyDudes(debug: Any? = null): IntArray {
         val result = IntArray(dataList.size)
 
         // Initialize all vertices as unassigned
