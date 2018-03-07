@@ -317,13 +317,18 @@ data class Var(private val t: Type, private var x: String) : Expr {
     }
 
     override fun eval(env: HashMap<String, VarPair>): Int {
-        val value = env[x]?.v
+        val value = env[x]
+        value?.let {
+            if (it.t != t) throw RuntimeException("Using incompatible type with variable")
 
-        try {
-            return value as Int
-        } catch (e: ClassCastException) {
-            throw RuntimeException("Syntax error, variable $x not defined before use")
+            try {
+                return value.v as Int
+            } catch (e: ClassCastException) {
+                throw RuntimeException("Syntax error, variable $x not defined before use")
+            }
         }
+
+        throw RuntimeException("Syntax error, variable $x not defined before use")
     }
 }
 

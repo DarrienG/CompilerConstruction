@@ -56,8 +56,8 @@
       <file leaf-file-name="EvalTest.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+            <state relative-caret-position="672">
+              <caret line="99" column="4" lean-forward="false" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -74,7 +74,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Let</find>
       <find>count.count</find>
       <find>select(</find>
       <find>: argu</find>
@@ -103,6 +102,7 @@
       <find>throw</find>
       <find>boolean</find>
       <find>not</find>
+      <find>comp</find>
       <find>let</find>
     </findStrings>
   </component>
@@ -543,8 +543,8 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/Main.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/X0.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Compiler.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Lang.kt" />
+        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
       </list>
     </option>
   </component>
@@ -645,7 +645,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.EvalTest">
+  <component name="RunManager" selected="JUnit.EvalTest.testLetTypeChecker">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
@@ -726,14 +726,14 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="EvalTest.testLet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="EvalTest.testLetTypeChecker" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="BasicCompiler_test" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="EvalTest" />
-      <option name="METHOD_NAME" value="testLet" />
+      <option name="METHOD_NAME" value="testLetTypeChecker" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -821,17 +821,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Kotlin.MainKt" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testLet" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.EvalTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
-        <item index="3" class="java.lang.String" itemvalue="Kotlin.MainKt" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest.testLet" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
+        <item index="4" class="java.lang.String" itemvalue="Kotlin.MainKt" />
       </list>
     </recent_temporary>
   </component>
@@ -887,7 +887,7 @@
       <workItem from="1520183808237" duration="4273000" />
       <workItem from="1520198174446" duration="14678000" />
       <workItem from="1520219000018" duration="703000" />
-      <workItem from="1520446154152" duration="8245000" />
+      <workItem from="1520446154152" duration="9201000" />
     </task>
     <servers />
   </component>
@@ -895,23 +895,14 @@
     <history-entry file="EvalTest - 2018.03.07 at 17h 14m 21s.xml">
       <configuration name="EvalTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 16h 59m 19s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    <history-entry file="EvalTest - 2018.03.07 at 17h 41m 45s.xml">
+      <configuration name="EvalTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 16h 59m 32s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    <history-entry file="EvalTest - 2018.03.07 at 17h 43m 07s.xml">
+      <configuration name="EvalTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 01m 15s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 01m 35s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 02m 07s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 04m 31s.xml">
-      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    <history-entry file="EvalTest - 2018.03.07 at 17h 43m 23s.xml">
+      <configuration name="EvalTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 05m 30s.xml">
       <configuration name="EvalTest.testCond" configurationId="JUnit" />
@@ -922,9 +913,18 @@
     <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 14m 09s.xml">
       <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 09s.xml">
+      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 21s.xml">
+      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 23s.xml">
+      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113521000" />
+    <option name="totallyTimeSpent" value="114477000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1305,26 +1305,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/X0.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3044">
           <caret line="315" column="30" lean-forward="false" selection-start-line="315" selection-start-column="30" selection-end-line="315" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/DebugUtils.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1339,7 +1323,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Compiler.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="-313">
           <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
           <folding>
             <element signature="e#0#58#0" expanded="true" />
@@ -1347,18 +1331,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/DebugUtils.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="318" column="27" lean-forward="false" selection-start-line="318" selection-start-column="27" selection-end-line="318" selection-end-column="27" />
+        <state relative-caret-position="186">
+          <caret line="298" column="14" lean-forward="false" selection-start-line="298" selection-start-column="14" selection-end-line="298" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+        <state relative-caret-position="672">
+          <caret line="99" column="4" lean-forward="false" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
           <folding />
         </state>
       </provider>

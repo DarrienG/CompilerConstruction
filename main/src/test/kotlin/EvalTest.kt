@@ -83,10 +83,19 @@ class EvalTest {
         ))
         assert(interpP(p) == 1)
 
+        assert(interpP(p) == 1)
         p = (Program(
                 If(Bool("f"), Bool("f"), Num(600)
                 )))
         // Will throw exception because both sides must return the same type
+        interpP(p)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun testLetTypeChecker() {
+        val p = Program(
+                Let("y", Add(Num(5), Num(32)),
+                        Not(Var(Type.BOOL, "y"))))
         interpP(p)
     }
 }
