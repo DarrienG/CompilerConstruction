@@ -16,7 +16,7 @@ class Compiler() {
 
     /**
      * Select: Convert CProgram [CProgram] to an accompanying XProgram [XProgram].
-     * New class is a mish mash of almost assembly instructions.
+     * New class is a mish-mash of almost assembly instructions.
      */
     private fun i2(cP: CProgram): XProgram = cP.select()
 

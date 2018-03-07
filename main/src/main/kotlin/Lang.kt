@@ -1,4 +1,46 @@
+import com.sun.org.apache.xpath.internal.operations.Bool
+
+enum class Type {
+    INT,
+    BOOL;
+}
+
+enum class CmpType {
+    EQ,     // Equals, and tunes your music
+    NE,     // Not equals
+    GT,     // Greater than
+    LT,     // Less than
+    GTE,    // Greater than equal to
+    LTE,    // 5G, less than equal to
+    ZER,    // Is zero
+    NZER,   // Not zero
+}
+
+data class Bool(private val b: String): Expr {
+    private val t: Int = if (b == "t") 1 else 0
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        return t
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getType(): Type {
+        return Type.BOOL
+    }
+}
+
 data class Num(private val n: Int) : Expr {
+    override fun getType(): Type {
+        return Type.INT
+    }
+
     override fun flatten(count: Counter): CProgram {
         return CProgram(hashSetOf(), mutableListOf(), CNum(n))
     }
@@ -7,12 +49,16 @@ data class Num(private val n: Int) : Expr {
         // No need to do anything
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Int {
         return n
     }
 }
 
 data class Neg(private val e: Expr) : Expr {
+    override fun getType(): Type {
+        return Type.INT
+    }
+
     override fun flatten(count: Counter): CProgram {
         val cP = e.flatten(count)
         val newVal = "neg_${count.count}"
@@ -27,12 +73,17 @@ data class Neg(private val e: Expr) : Expr {
         e.uniquify(env, count)
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        if (e.getType() != Type.INT) throw RuntimeException("Attempting to negate non-int")
         return e.eval(env) * -1
     }
 }
 
-data class Add(private val l: Expr, private val r: Expr) : Expr {
+data class Add(private val l: Expr, private val r: Expr): Expr {
+    override fun getType(): Type {
+        return Type.INT
+    }
+
     override fun flatten(count: Counter): CProgram {
         val cPL = l.flatten(count)
         val cPR = r.flatten(count)
@@ -58,12 +109,17 @@ data class Add(private val l: Expr, private val r: Expr) : Expr {
         r.uniquify(env, count)
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        weNumero(l, r)
         return l.eval(env) + r.eval(env)
     }
 }
 
 data class Let(private var x: String, private val xe: Expr, private val be: Expr) : Expr {
+    override fun getType(): Type {
+        return xe.getType()
+    }
+
     override fun flatten(count: Counter): CProgram {
         val cPXE = xe.flatten(count)
         val cpBE = be.flatten(count)
@@ -91,13 +147,160 @@ data class Let(private var x: String, private val xe: Expr, private val be: Expr
         be.uniquify(env, count)
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
-        env[x] = xe.eval(env)
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        env[x] = VarPair(xe.getType(), xe.eval(env))
         return be.eval(env)
     }
 }
 
-data class Var(private var x: String) : Expr {
+data class If(private val x: Expr, private val trX: Expr, private val faX: Expr): Expr {
+    override fun getType(): Type {
+        val rT = trX.getType()
+        val lT = faX.getType()
+        if (rT != lT) {
+            throw RuntimeException("Incompatible expression types")
+        }
+        return rT
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        val t = x.getType()
+        if (t != Type.BOOL) {
+            throw RuntimeException("Attempting to evaluate non-bool type: $t")
+        }
+        getType()
+
+        return if (x.eval(env) != 0) {
+            trX.eval(env)
+        } else {
+            faX.eval(env)
+        }
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class And(private val lx: Expr, private val rx: Expr): Expr {
+    override fun getType(): Type {
+        return Type.BOOL
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        weBoolin(lx, rx)
+        return if (lx.eval(env) + rx.eval(env) != 2) 1 else 0
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class Or(private val lx: Expr, private val rx: Expr): Expr {
+    override fun getType(): Type {
+        return Type.BOOL
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        weBoolin(lx, rx)
+        return if (lx.eval(env) + rx.eval(env) > 0) 1 else 0
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class Not(private val x: Expr): Expr {
+    override fun getType(): Type {
+        return Type.BOOL
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        if (x.getType() != Type.BOOL) {
+            throw RuntimeException("Attempting to <NOT> a non-bool type")
+        }
+        return x.eval(env).xor(1)
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class Comp(private val type: CmpType, private val lx: Expr, private val rx: Expr): Expr {
+    override fun getType(): Type {
+        return Type.BOOL
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        return when(type) {
+            CmpType.EQ -> if (lx.eval(env) == rx.eval(env)) 1 else 0
+            CmpType.NE -> if (lx.eval(env) != rx.eval(env)) 1 else 0
+            CmpType.GT -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) > rx.eval(env)) 1 else 0
+            }
+            CmpType.LT -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) < rx.eval(env)) 1 else 0
+            }
+            CmpType.GTE -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) >= rx.eval(env)) 1 else 0
+            }
+            CmpType.LTE -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) <= rx.eval(env)) 1 else 0
+            }
+            CmpType.ZER -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) + rx.eval(env) == 0) 1 else 0
+            }
+            CmpType.NZER -> {
+                weNumero(lx, rx)
+                if (lx.eval(env) + rx.eval(env) != 0) 1 else 0
+            }
+        }
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+
+data class Var(private val t: Type, private var x: String) : Expr {
+    override fun getType(): Type {
+        return t
+    }
+
     override fun flatten(count: Counter): CProgram {
         val varList = hashSetOf<String>()
         varList.add(x)
@@ -113,8 +316,8 @@ data class Var(private var x: String) : Expr {
         throw RuntimeException("Syntax error, variable $x not defined before use")
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
-        val value = env[x]
+    override fun eval(env: HashMap<String, VarPair>): Int {
+        val value = env[x]?.v
 
         try {
             return value as Int
@@ -124,7 +327,11 @@ data class Var(private var x: String) : Expr {
     }
 }
 
-class Read : Expr {
+class Read(private val t: Type): Expr {
+    override fun getType(): Type {
+        return t
+    }
+
     override fun flatten(count: Counter): CProgram {
         val newVal = "rv_${count.count}"
         count.count += 1
@@ -135,7 +342,7 @@ class Read : Expr {
         // Do not need to do anything
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Int {
         val input = readLine()
         input?.let {
             return input.toInt()
@@ -145,6 +352,10 @@ class Read : Expr {
 }
 
 class Write(private var x: Expr) : Expr {
+    override fun getType(): Type {
+        return x.getType()
+    }
+
     override fun flatten(count: Counter): CProgram {
         val cP = x.flatten(count)
         cP.stmtList.add(CStmt(CVar(cP.arg.getVal() as String), CWrite(cP.arg)))
@@ -152,11 +363,11 @@ class Write(private var x: Expr) : Expr {
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-            x.uniquify(env, count)
-            return
+        x.uniquify(env, count)
+        return
     }
 
-    override fun eval(env: HashMap<String, Int>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Int {
         val value = x.eval(env)
         println(value)
         return value
@@ -167,10 +378,13 @@ class Write(private var x: Expr) : Expr {
     }
 }
 
+data class VarPair(val t: Type, val v: Int)
+
 interface Expr {
-    fun eval(env: HashMap<String, Int>): Int
+    fun eval(env: HashMap<String, VarPair>): Int
     fun uniquify(env: HashMap<String, String>, count: Counter)
     fun flatten(count: Counter): CProgram
+    fun getType(): Type
 }
 
 data class Program(val e: Expr) {
@@ -186,6 +400,30 @@ data class Program(val e: Expr) {
 data class Counter(var count: Int) {
     override fun toString(): String {
         return "$count"
+    }
+}
+
+/**
+ * Checks to see if two expressions booleans.
+ */
+fun weBoolin(lx: Expr, rx: Expr) {
+    if (lx.getType() != Type.BOOL && rx.getType() != Type.BOOL) {
+        throw RuntimeException("Attempting to compare two non-bool types")
+    }
+}
+
+/**
+ * Checks to see if two expressions are numbers.
+ */
+fun weNumero(lx: Expr, rx: Expr) {
+    if (lx.getType() != Type.INT && rx.getType() != Type.INT) {
+        throw RuntimeException("Attempting to perform int operation on two non ints")
+    }
+}
+
+fun weSame(lx: Expr, rx: Expr) {
+    if (lx.getType() != rx.getType()) {
+        throw RuntimeException("Attempting to perform operation on two incompatible types")
     }
 }
 
