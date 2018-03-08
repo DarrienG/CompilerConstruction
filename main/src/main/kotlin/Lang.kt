@@ -24,11 +24,11 @@ data class Bool(private val b: String): Expr {
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // No need to do anything
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return CProgram(hashSetOf(), mutableListOf(), CNum(t))
     }
 
     override fun getType(): Type {
@@ -97,8 +97,8 @@ data class Add(private val l: Expr, private val r: Expr): Expr {
         varList.add(newVal)
 
         val stmtList = mutableListOf<CStmt>()
-        stmtList.addAll(cPR.stmtList)
         stmtList.addAll(cPL.stmtList)
+        stmtList.addAll(cPR.stmtList)
         stmtList.add(CStmt(CVar(newVal), CAdd(cPL.arg, cPR.arg)))
 
         return CProgram(varList, stmtList, CVar(newVal))
@@ -178,13 +178,37 @@ data class If(private val x: Expr, private val trX: Expr, private val faX: Expr)
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        x.uniquify(env, count)
+        trX.uniquify(env, count)
+        faX.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        val cCon = x.flatten(count)
+        val cPT = trX.flatten(count)
+        val cPF = faX.flatten(count)
 
+        val newVal = "if_${count.count}"
+        val trueVal = "tif_${count.count}"
+        val falseVal = "fif_${count.count}"
+        count.count += 1
+
+        val varList = hashSetOf<String>()
+        varList.addAll(cCon.varList)
+        varList.addAll(cPT.varList)
+        varList.addAll(cPF.varList)
+
+        val stmtList = mutableListOf<CStmt>()
+        stmtList.addAll(cCon.stmtList)
+        cPT.stmtList.add(CStmt(CVar(trueVal), CLet(cPT.arg)))
+        cPF.stmtList.add(CStmt(CVar(falseVal), CLet(cPF.arg)))
+
+        // This statement is about as flat as the Earth
+        // You decide what that means
+        stmtList.add(CStmt(CVar(newVal), CIf(cCon.arg, cPT.stmtList, cPF.stmtList)))
+
+        return CProgram(varList, stmtList, CVar(newVal))
+    }
 }
 
 data class And(private val lx: Expr, private val rx: Expr): Expr {
@@ -198,11 +222,28 @@ data class And(private val lx: Expr, private val rx: Expr): Expr {
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        lx.uniquify(env, count)
+        rx.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val cPL = lx.flatten(count)
+        val cPR = rx.flatten(count)
+
+        val newVal = "and_${count.count}"
+        count.count += 1
+
+        val varList = hashSetOf<String>()
+        varList.addAll(cPL.varList)
+        varList.addAll(cPR.varList)
+        varList.add(newVal)
+
+        val stmtList = mutableListOf<CStmt>()
+        stmtList.addAll(cPL.stmtList)
+        stmtList.addAll(cPR.stmtList)
+        stmtList.add(CStmt(CVar(newVal), CAnd(cPL.arg, cPR.arg)))
+
+        return CProgram(varList, stmtList, CVar(newVal))
     }
 
 }
@@ -218,33 +259,56 @@ data class Or(private val lx: Expr, private val rx: Expr): Expr {
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        lx.uniquify(env, count)
+        rx.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val cPL = lx.flatten(count)
+        val cPR = rx.flatten(count)
+
+        val newVal = "or_${count.count}"
+        count.count += 1
+
+        val varList = hashSetOf<String>()
+        varList.addAll(cPL.varList)
+        varList.addAll(cPR.varList)
+        varList.add(newVal)
+
+        val stmtList = mutableListOf<CStmt>()
+        stmtList.addAll(cPL.stmtList)
+        stmtList.addAll(cPR.stmtList)
+        stmtList.add(CStmt(CVar(newVal), COr(cPL.arg, cPR.arg)))
+
+        return CProgram(varList, stmtList, CVar(newVal))
     }
 
 }
 
-data class Not(private val x: Expr): Expr {
+data class Not(private val e: Expr): Expr {
     override fun getType(): Type {
         return Type.BOOL
     }
 
     override fun eval(env: HashMap<String, VarPair>): Int {
-        if (x.getType() != Type.BOOL) {
+        if (e.getType() != Type.BOOL) {
             throw RuntimeException("Attempting to <NOT> a non-bool type")
         }
-        return x.eval(env).xor(1)
+        return e.eval(env).xor(1)
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        e.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val cP = e.flatten(count)
+        val newVal = "not_${count.count}"
+        count.count += 1
+        cP.varList.add(newVal)
+        cP.stmtList.add(CStmt(CVar(newVal), CNot(cP.arg)))
+        cP.arg = CVar(newVal)
+        return cP
     }
 
 }
@@ -256,8 +320,14 @@ data class Comp(private val type: CmpType, private val lx: Expr, private val rx:
 
     override fun eval(env: HashMap<String, VarPair>): Int {
         return when(type) {
-            CmpType.EQ -> if (lx.eval(env) == rx.eval(env)) 1 else 0
-            CmpType.NE -> if (lx.eval(env) != rx.eval(env)) 1 else 0
+            CmpType.EQ -> {
+                weSame(lx, rx)
+                if (lx.eval(env) == rx.eval(env)) 1 else 0
+            }
+            CmpType.NE -> {
+                weSame(lx, rx)
+                if (lx.eval(env) != rx.eval(env)) 1 else 0
+            }
             CmpType.GT -> {
                 weNumero(lx, rx)
                 if (lx.eval(env) > rx.eval(env)) 1 else 0
@@ -286,13 +356,29 @@ data class Comp(private val type: CmpType, private val lx: Expr, private val rx:
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        lx.uniquify(env, count)
+        rx.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        val cPL = lx.flatten(count)
+        val cPR = rx.flatten(count)
 
+        val newVal = "comp_${count.count}"
+        count.count += 1
+
+        val varList = hashSetOf<String>()
+        varList.addAll(cPL.varList)
+        varList.addAll(cPR.varList)
+        varList.add(newVal)
+
+        val stmtList = mutableListOf<CStmt>()
+        stmtList.addAll(cPL.stmtList)
+        stmtList.addAll(cPR.stmtList)
+        stmtList.add(CStmt(CVar(newVal), CComp(cPL.arg, cPR.arg, type)))
+
+        return CProgram(varList, stmtList, CVar(newVal))
+    }
 }
 
 
@@ -322,7 +408,7 @@ data class Var(private val t: Type, private var x: String) : Expr {
             if (it.t != t) throw RuntimeException("Using incompatible type with variable")
 
             try {
-                return value.v as Int
+                return value.v
             } catch (e: ClassCastException) {
                 throw RuntimeException("Syntax error, variable $x not defined before use")
             }

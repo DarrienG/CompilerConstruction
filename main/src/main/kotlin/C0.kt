@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.Arg
+
 interface Argument {
     fun getVal(): Any
 }
@@ -5,19 +7,19 @@ interface CExpr {
     fun select(xp: XProgram, arg: Argument)
 }
 
-data class CNum(private var n: Int = 314159): Argument {
+data class CNum(private val n: Int = 314159): Argument {
     override fun getVal(): Any {
         return n
     }
-
 }
-data class CVar(private var x: String): Argument {
+
+data class CVar(private val x: String): Argument {
     override fun getVal(): Any {
         return x
     }
 }
 
-data class CStmt(var x: CVar, val xe: CExpr)
+data class CStmt(val x: CVar, val xe: CExpr)
 
 data class CLet(private val a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
@@ -33,6 +35,39 @@ data class CNeg(private val a: Argument): CExpr {
         xp.instrList.add(XMovq(sentArg, dest))
         xp.instrList.add(XNegq(dest))
     }
+}
+
+data class CNot(private val a: Argument): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class CAnd(private val a: Argument, private val b: Argument): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
+data class COr(private val a: Argument, private  val b: Argument): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class CComp(private val a: Argument, private val b: Argument, private val type: CmpType): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
+data class CIf(private val con: Argument, private val tStmt: List<CStmt>, private val fList: List<CStmt>): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
 
 data class CAdd(private val a: Argument, private val b: Argument): CExpr {
@@ -52,7 +87,7 @@ class CRead: CExpr {
     }
 }
 
-data class CWrite(private var a: Argument): CExpr {
+data class CWrite(private val a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
         val sentArg = convertCArgToXArg(a)
         xp.instrList.add(XMovq(sentArg, XReg("rdi")))
