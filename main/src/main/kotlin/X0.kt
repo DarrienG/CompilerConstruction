@@ -20,7 +20,23 @@ data class XOffset(private val reg: XReg, private val offset: Int): XArg {
 // Does not need overridden toString. Should not be printed to asm anyway.
 data class XVar(val x: String): XArg
 
-data class XLabel(private val x: String): XArg {
+data class XLabel(private val x: String): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        // no-op
+    }
+
+    override fun emitFix(): Instruction? {
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        // no-op
+    }
+
+    fun invoke(): XLabel {
+        return XLabel("$x:\n")
+    }
+
     override fun toString(): String {
         return x
     }
@@ -50,7 +66,7 @@ data class XRaw(private val x: String): Instruction {
     }
 
     // No-op
-    override fun convVar(offsetMap: HashMap<XArg, XArg>) {}
+    override fun convVar(regMap: HashMap<XArg, XArg>) {}
 
     // Does not need fix
     override fun emitFix(): Instruction? = null
@@ -62,8 +78,8 @@ data class XRaw(private val x: String): Instruction {
 
 data class XAddq(private var al: XArg, private var ar: XArg): Instruction {
     override fun liveVars(liveVars: MutableSet<XArg>) {
-        if (al is XVar) liveVars.add(al)
-        if (ar is XVar) liveVars.add(ar)
+        if (al is XVar) liveVars.add(al); println("added a var $ar")
+        if (ar is XVar) liveVars.add(ar); println("added a var $al")
     }
 
     override fun emitFix(): Instruction? {
@@ -85,6 +101,163 @@ data class XAddq(private var al: XArg, private var ar: XArg): Instruction {
 
     override fun toString(): String {
         return "addq\t$al, $ar\n"
+    }
+}
+
+data class XAnd(private var al: XArg, private var ar: XArg): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        val lA = al
+        val rA = ar
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
+    }
+
+    override fun emitFix(): Instruction? {
+        if (al is XOffset && ar is XOffset) {
+            val movq = XMovq(al, XReg("rax"))
+            al = XReg("rax")
+            return movq
+        }
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        if (al is XVar) liveVars.add(al)
+        if (ar is XVar) liveVars.add(ar)
+    }
+
+    override fun toString(): String {
+        return "andq\t$al, $ar\n"
+    }
+}
+
+data class XOrq(private var al: XArg, private var ar: XArg): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        val lA = al
+        val rA = ar
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
+    }
+
+    override fun emitFix(): Instruction? {
+        if (al is XOffset && ar is XOffset) {
+            val movq = XMovq(al, XReg("rax"))
+            al = XReg("rax")
+            return movq
+        }
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        if (al is XVar) liveVars.add(al)
+        if (ar is XVar) liveVars.add(ar)
+    }
+
+    override fun toString(): String {
+        return "orq\t$al, $ar\n"
+    }
+}
+
+data class XXOrq(private var al: XArg, private var ar: XArg): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        val lA = al
+        val rA = ar
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
+    }
+
+    override fun emitFix(): Instruction? {
+        if (al is XOffset && ar is XOffset) {
+            val movq = XMovq(al, XReg("rax"))
+            al = XReg("rax")
+            return movq
+        }
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        if (al is XVar) liveVars.add(al)
+        if (ar is XVar) liveVars.add(ar)
+    }
+
+    override fun toString(): String {
+        return "xorq\t$al, $ar\n"
+    }
+}
+
+data class XCmpq(private var al: XArg, private var ar: XArg): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        val lA = al
+        val rA = ar
+        regMap[lA]?.let { al = it }
+        regMap[rA]?.let { ar = it }
+    }
+
+    override fun emitFix(): Instruction? {
+        if (al is XOffset && ar is XOffset) {
+            val movq = XMovq(al, XReg("rax"))
+            al = XReg("rax")
+            return movq
+        }
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        if (al is XVar) liveVars.add(al)
+        if (ar is XVar) liveVars.add(ar)
+    }
+
+    override fun toString(): String {
+        return "cmpq\t$al, $ar\n"
+    }
+}
+
+data class XJmp(private val lab: XLabel): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        // no-op
+    }
+
+    override fun emitFix(): Instruction? {
+       return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        // no-op
+    }
+
+    override fun toString(): String {
+        return "jmp\t\t$lab\n"
+    }
+}
+
+data class XJmpIf(private var cc: CmpType, private val lab: XLabel): Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        // no-op
+    }
+
+    override fun emitFix(): Instruction? {
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        // no-op
+    }
+
+    // This is not what a toString is supposed to look like
+    override fun toString(): String {
+        return when(cc) {
+            CmpType.EQ -> "je\t\t$lab\n"
+            CmpType.NE -> "jne\t\t$lab\n"
+            CmpType.GT -> "jg\t\t$lab\n"
+            CmpType.GTE -> "jge\t\t$lab\n"
+            CmpType.LT -> "jl\t\t$lab\n"
+            CmpType.LTE -> "jle\t\t$lab\n"
+            CmpType.ZER -> "jz\t\t$lab\n"
+            CmpType.NZER -> "jpz\t\t$lab\n"
+            CmpType.AND -> "je\t\t$lab\n"
+            CmpType.OR -> "jg\t\t$lab\n"
+            CmpType.NOT -> "jne\t\t$lab\n"
+        }
     }
 }
 
@@ -115,7 +288,7 @@ data class XSubq(private var al: XArg, private var ar: XArg): Instruction {
     }
 }
 
-data class XCallq(private var a: XArg): Instruction {
+data class XCallq(private var a: XLabel): Instruction {
     override fun liveVars(liveVars: MutableSet<XArg>) {
         // no-op
     }
@@ -124,12 +297,28 @@ data class XCallq(private var a: XArg): Instruction {
     override fun emitFix(): Instruction? = null
 
     override fun convVar(regMap: HashMap<XArg, XArg>) {
-        val xV = a
-        regMap[xV]?.let { a = it }
     }
 
     override fun toString(): String {
         return "callq\t$a\n"
+    }
+}
+
+class XMovzbq: Instruction {
+    override fun convVar(regMap: HashMap<XArg, XArg>) {
+        //no-op
+    }
+
+    override fun emitFix(): Instruction? {
+        return null
+    }
+
+    override fun liveVars(liveVars: MutableSet<XArg>) {
+        // no-op
+    }
+
+    override fun toString(): String {
+        return "movzbq\t${XReg("al")}, ${XReg("rax")}\n"
     }
 }
 
@@ -235,8 +424,6 @@ data class XProgram(val varList: MutableList<XArg>, val instrList: MutableList<I
 data class MetaVar(val idx: Int, val edges: MutableSet<Int>)
 
 
-// TODO GET RID OF ALL CASTS IN CONVVAR??????????
-
 enum class NumRegs(val regCount: Int) {
     NONE(0),
     CALLEE(5),
@@ -275,9 +462,7 @@ fun assign(xp: XProgram, numRegs: NumRegs) {
             for (j in i + 1 until iterableArgs.size) {
                 val startNode = iterableArgs[i]
                 val addedEdge = varMap[iterableArgs[j]]?.idx
-                addedEdge?.let { edge ->
-                    varMap[startNode]?.edges?.add(edge)
-                }
+                addedEdge?.let { edge -> varMap[startNode]?.edges?.add(edge) }
             }
         }
     }

@@ -18,7 +18,7 @@ class EvalTest {
         assert(interpP(p) == -5)
         val c = p.flatten()
         println(c)
-        Compiler().compile(p, timed = true, toFile = true)
+        Compiler().compile(p, timed = true, numRegs = NumRegs.NONE)
     }
 
     @Test(expected = RuntimeException::class)
@@ -51,6 +51,7 @@ class EvalTest {
 
     @Test(expected = RuntimeException::class)
     fun testCond() {
+        val c = Compiler()
         var p = Program(Bool("t"))
         assert(interpP(p) == 1)
 
@@ -77,13 +78,18 @@ class EvalTest {
         ))
         assert(interpP(p) == 1)
 
-
         p = (Program(
                 Comp(CmpType.NZER, Num(5), Num(22))
         ))
         assert(interpP(p) == 1)
 
-        assert(interpP(p) == 1)
+        p = (Program(
+                If(Comp(CmpType.GT, Num(5), Num(17)),
+                        Num(13), Num(25))
+        ))
+        assert(interpP(p) == 25)
+
+        c.compile(p, toFile = true)
         p = (Program(
                 If(Bool("f"), Bool("f"), Num(600)
                 )))
@@ -97,5 +103,15 @@ class EvalTest {
                 Let("y", Add(Num(5), Num(32)),
                         Not(Var(Type.BOOL, "y"))))
         interpP(p)
+    }
+
+    @Test
+    fun iWantToDieTest() {
+        // Test if true
+        val p = (Program(
+                If(Bool("f"), Num(5), Num(120))
+        ))
+        assert(interpP(p) == 120)
+        Compiler().compile(p, numRegs = NumRegs.CALLEE, toFile = true)
     }
 }

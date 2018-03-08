@@ -1,5 +1,3 @@
-import com.sun.org.apache.xpath.internal.Arg
-
 interface Argument {
     fun getVal(): Any
 }
@@ -39,35 +37,70 @@ data class CNeg(private val a: Argument): CExpr {
 
 data class CNot(private val a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val sentArg = convertCArgToXArg(a)
+        xp.instrList.add(XOrq(sentArg, XInt(1)))
     }
-
 }
 
 data class CAnd(private val a: Argument, private val b: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val sentArgA = convertCArgToXArg(a)
+        val sentArgB = convertCArgToXArg(b)
+        val dest = convertCArgToXArg(arg)
+        xp.instrList.add(XMovq(sentArgA, dest))
+        xp.instrList.add(XAnd(sentArgB, dest))
     }
 }
 
 data class COr(private val a: Argument, private  val b: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-}
-
-data class CComp(private val a: Argument, private val b: Argument, private val type: CmpType): CExpr {
-    override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val sentArgA = convertCArgToXArg(a)
+        val sentArgB = convertCArgToXArg(b)
+        val dest = convertCArgToXArg(arg)
+        xp.instrList.add(XMovq(sentArgA, dest))
+        xp.instrList.add(XOrq(sentArgB, dest))
     }
 }
 
-data class CIf(private val con: Argument, private val tStmt: List<CStmt>, private val fList: List<CStmt>): CExpr {
+data class CComp(private val a: Argument, private val b: Argument, val type: CmpType): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        val sentArgA = convertCArgToXArg(a)
+        val sentArgB = convertCArgToXArg(b)
+        val dest = convertCArgToXArg(arg)
 
+        xp.instrList.add(XMovq(sentArgB, dest))
+        when(type) {
+            // These need a little extra love and care
+            CmpType.OR -> {
+                xp.instrList.add(XAddq(sentArgA, dest))
+                xp.instrList.add(XCmpq(XInt(0), dest))
+            }
+            CmpType.NOT -> {
+                xp.instrList.add(XXOrq(sentArgA, dest))
+                xp.instrList.add(XCmpq(XInt(1), dest))
+            }
+            else -> xp.instrList.add(XCmpq(sentArgA, dest))
+        }
+    }
+}
+
+data class CIf(private val labs: IfLabs, private val cc: CComp, private val tList: List<CStmt>, private val fList: List<CStmt>): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        cc.select(xp, arg)
+        xp.instrList.add(XJmpIf(cc.type, labs.trueL))
+        xp.instrList.add(XJmp(labs.falseL))
+
+        xp.instrList.add(labs.trueL.invoke())
+
+        tList.forEach { it.xe.select(xp, it.x) }
+        xp.instrList.add(XJmp(labs.endL))
+
+        xp.instrList.add(labs.falseL.invoke())
+        fList.forEach { it.xe.select(xp, it.x) }
+        xp.instrList.add(XJmp(labs.endL))
+
+        xp.instrList.add(labs.endL.invoke())
+    }
 }
 
 data class CAdd(private val a: Argument, private val b: Argument): CExpr {

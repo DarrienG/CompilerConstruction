@@ -1,5 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool
-
 enum class Type {
     INT,
     BOOL;
@@ -14,25 +12,16 @@ enum class CmpType {
     LTE,    // 5G, less than equal to
     ZER,    // Is zero
     NZER,   // Not zero
+    AND,   // Not zero
+    OR,   // Not zero
+    NOT;   // Not zero
 }
 
-data class Bool(private val b: String): Expr {
+data class Bool(private val b: String): Comp(CmpType.AND, Num(1), Num(if (b == "t") 1 else 0)) {
     private val t: Int = if (b == "t") 1 else 0
 
     override fun eval(env: HashMap<String, VarPair>): Int {
         return t
-    }
-
-    override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        // No need to do anything
-    }
-
-    override fun flatten(count: Counter): CProgram {
-        return CProgram(hashSetOf(), mutableListOf(), CNum(t))
-    }
-
-    override fun getType(): Type {
-        return Type.BOOL
     }
 }
 
@@ -54,7 +43,7 @@ data class Num(private val n: Int) : Expr {
     }
 }
 
-data class Neg(private val e: Expr) : Expr {
+data class Neg(private val e: Expr): Expr {
     override fun getType(): Type {
         return Type.INT
     }
@@ -153,7 +142,7 @@ data class Let(private var x: String, private val xe: Expr, private val be: Expr
     }
 }
 
-data class If(private val x: Expr, private val trX: Expr, private val faX: Expr): Expr {
+data class If(private val cc: Comp, private val trX: Expr, private val faX: Expr): Expr {
     override fun getType(): Type {
         val rT = trX.getType()
         val lT = faX.getType()
@@ -164,13 +153,13 @@ data class If(private val x: Expr, private val trX: Expr, private val faX: Expr)
     }
 
     override fun eval(env: HashMap<String, VarPair>): Int {
-        val t = x.getType()
+        val t = cc.getType()
         if (t != Type.BOOL) {
             throw RuntimeException("Attempting to evaluate non-bool type: $t")
         }
         getType()
 
-        return if (x.eval(env) != 0) {
+        return if (cc.eval(env) != 0) {
             trX.eval(env)
         } else {
             faX.eval(env)
@@ -178,19 +167,19 @@ data class If(private val x: Expr, private val trX: Expr, private val faX: Expr)
     }
 
     override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        x.uniquify(env, count)
+        cc.uniquify(env, count)
         trX.uniquify(env, count)
         faX.uniquify(env, count)
     }
 
     override fun flatten(count: Counter): CProgram {
-        val cCon = x.flatten(count)
+        val cCon = cc.flatten(count)
         val cPT = trX.flatten(count)
         val cPF = faX.flatten(count)
 
-        val newVal = "if_${count.count}"
-        val trueVal = "tif_${count.count}"
-        val falseVal = "fif_${count.count}"
+        val startLabel = "if_${count.count}"
+        val trueLabel = "tif_${count.count}"
+        val falseLabel = "fif_${count.count}"
         count.count += 1
 
         val varList = hashSetOf<String>()
@@ -198,122 +187,48 @@ data class If(private val x: Expr, private val trX: Expr, private val faX: Expr)
         varList.addAll(cPT.varList)
         varList.addAll(cPF.varList)
 
+        val sl = XLabel(startLabel)
+        val tl = XLabel(trueLabel)
+        val fl = XLabel(falseLabel)
+        val el = XLabel("${startLabel}_end")
+
+        varList.add(sl.toString())
+        varList.add(tl.toString())
+        varList.add(fl.toString())
+        varList.add(el.toString())
+
         val stmtList = mutableListOf<CStmt>()
         stmtList.addAll(cCon.stmtList)
-        cPT.stmtList.add(CStmt(CVar(trueVal), CLet(cPT.arg)))
-        cPF.stmtList.add(CStmt(CVar(falseVal), CLet(cPF.arg)))
+
+        cPT.stmtList.add(CStmt(CVar(trueLabel), CLet(cPT.arg)))
+        cPF.stmtList.add(CStmt(CVar(falseLabel), CLet(cPF.arg)))
+
+        val labs = IfLabs(
+                sl,
+                tl,
+                fl,
+                el
+        )
 
         // This statement is about as flat as the Earth
         // You decide what that means
-        stmtList.add(CStmt(CVar(newVal), CIf(cCon.arg, cPT.stmtList, cPF.stmtList)))
+        stmtList.add(CStmt(CVar(startLabel),
+                CIf(labs, CComp(CNum(1), cCon.arg, cc.type),
+                        cPT.stmtList, cPF.stmtList)))
 
-        return CProgram(varList, stmtList, CVar(newVal))
+        return CProgram(varList, stmtList, CVar(startLabel))
     }
 }
 
-data class And(private val lx: Expr, private val rx: Expr): Expr {
-    override fun getType(): Type {
-        return Type.BOOL
-    }
+data class IfLabs(val startL: XLabel, val trueL: XLabel, val falseL: XLabel, val endL: XLabel)
 
-    override fun eval(env: HashMap<String, VarPair>): Int {
-        weBoolin(lx, rx)
-        return if (lx.eval(env) + rx.eval(env) != 2) 1 else 0
-    }
+data class And(private val lx: Expr, private val rx: Expr): Comp(CmpType.AND, lx, rx)
 
-    override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        lx.uniquify(env, count)
-        rx.uniquify(env, count)
-    }
+data class Or(private val lx: Expr, private val rx: Expr): Comp(CmpType.OR, lx, rx)
 
-    override fun flatten(count: Counter): CProgram {
-        val cPL = lx.flatten(count)
-        val cPR = rx.flatten(count)
+data class Not(private val e: Expr): Comp(CmpType.NOT, e, Num(1))
 
-        val newVal = "and_${count.count}"
-        count.count += 1
-
-        val varList = hashSetOf<String>()
-        varList.addAll(cPL.varList)
-        varList.addAll(cPR.varList)
-        varList.add(newVal)
-
-        val stmtList = mutableListOf<CStmt>()
-        stmtList.addAll(cPL.stmtList)
-        stmtList.addAll(cPR.stmtList)
-        stmtList.add(CStmt(CVar(newVal), CAnd(cPL.arg, cPR.arg)))
-
-        return CProgram(varList, stmtList, CVar(newVal))
-    }
-
-}
-
-data class Or(private val lx: Expr, private val rx: Expr): Expr {
-    override fun getType(): Type {
-        return Type.BOOL
-    }
-
-    override fun eval(env: HashMap<String, VarPair>): Int {
-        weBoolin(lx, rx)
-        return if (lx.eval(env) + rx.eval(env) > 0) 1 else 0
-    }
-
-    override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        lx.uniquify(env, count)
-        rx.uniquify(env, count)
-    }
-
-    override fun flatten(count: Counter): CProgram {
-        val cPL = lx.flatten(count)
-        val cPR = rx.flatten(count)
-
-        val newVal = "or_${count.count}"
-        count.count += 1
-
-        val varList = hashSetOf<String>()
-        varList.addAll(cPL.varList)
-        varList.addAll(cPR.varList)
-        varList.add(newVal)
-
-        val stmtList = mutableListOf<CStmt>()
-        stmtList.addAll(cPL.stmtList)
-        stmtList.addAll(cPR.stmtList)
-        stmtList.add(CStmt(CVar(newVal), COr(cPL.arg, cPR.arg)))
-
-        return CProgram(varList, stmtList, CVar(newVal))
-    }
-
-}
-
-data class Not(private val e: Expr): Expr {
-    override fun getType(): Type {
-        return Type.BOOL
-    }
-
-    override fun eval(env: HashMap<String, VarPair>): Int {
-        if (e.getType() != Type.BOOL) {
-            throw RuntimeException("Attempting to <NOT> a non-bool type")
-        }
-        return e.eval(env).xor(1)
-    }
-
-    override fun uniquify(env: HashMap<String, String>, count: Counter) {
-        e.uniquify(env, count)
-    }
-
-    override fun flatten(count: Counter): CProgram {
-        val cP = e.flatten(count)
-        val newVal = "not_${count.count}"
-        count.count += 1
-        cP.varList.add(newVal)
-        cP.stmtList.add(CStmt(CVar(newVal), CNot(cP.arg)))
-        cP.arg = CVar(newVal)
-        return cP
-    }
-
-}
-
-data class Comp(private val type: CmpType, private val lx: Expr, private val rx: Expr): Expr {
+open class Comp(val type: CmpType, private val lx: Expr, private val rx: Expr): Expr {
     override fun getType(): Type {
         return Type.BOOL
     }
@@ -352,6 +267,18 @@ data class Comp(private val type: CmpType, private val lx: Expr, private val rx:
                 weNumero(lx, rx)
                 if (lx.eval(env) + rx.eval(env) != 0) 1 else 0
             }
+            CmpType.AND -> {
+                weBoolin(lx, rx)
+                if (lx.eval(env) + rx.eval(env) != 2) 1 else 0
+            }
+            CmpType.OR -> {
+                weBoolin(lx, rx)
+                if (lx.eval(env) + rx.eval(env) > 0) 1 else 0
+            }
+            CmpType.NOT -> {
+                if (lx.getType() != Type.BOOL) throw RuntimeException("Attempting to <NOT> a non-bool type")
+                lx.eval(env).xor(rx.eval(env))
+            }
         }
     }
 
@@ -364,7 +291,7 @@ data class Comp(private val type: CmpType, private val lx: Expr, private val rx:
         val cPL = lx.flatten(count)
         val cPR = rx.flatten(count)
 
-        val newVal = "comp_${count.count}"
+        val newVal = "comp_${type.name}_${count.count}"
         count.count += 1
 
         val varList = hashSetOf<String>()

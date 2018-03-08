@@ -19,7 +19,6 @@ internal class RegGraph<T>(private val dataList: List<T>) {
     /**
      * Throw that liveness in there. You better hope you keep the index of your shit in the same
      * spot.
-     * TODO: Throw all that data around in an object and make the user's life easier.
      * @param v: Node 1
      * @param w: Node 2
      */
@@ -37,6 +36,7 @@ internal class RegGraph<T>(private val dataList: List<T>) {
         // Initialize all vertices as unassigned
         Arrays.fill(result, -1)
 
+        if (result.isEmpty()) return result
         // Assign the first color to first vertex
         result[0] = 0
 

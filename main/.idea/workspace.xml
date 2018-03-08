@@ -52,18 +52,36 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="C0.kt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/C0.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="41" column="8" lean-forward="true" selection-start-line="41" selection-start-column="8" selection-end-line="41" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="C0.kt" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/main/kotlin/C0.kt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="244">
+                  <caret line="69" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="EvalTest.kt" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="399">
+                  <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -74,36 +92,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>convert</find>
-      <find>conver</find>
-      <find>kotlin_ver</find>
-      <find>tostr</find>
-      <find>write</find>
-      <find>xvar</find>
-      <find>convV</find>
-      <find>convVa</find>
-      <find>..</find>
-      <find>convvar</find>
-      <find>interface</find>
-      <find>println</find>
-      <find>print</find>
-      <find>* 8</find>
-      <find>thr</find>
-      <find>throw</find>
-      <find>boolean</find>
-      <find>not</find>
+      <find>Comp</find>
+      <find>class comp</find>
+      <find>Or</find>
+      <find>class no</find>
+      <find>no-op</find>
+      <find>assign</find>
+      <find>cmp</find>
+      <find>jmpif</find>
+      <find>if</find>
+      <find>convv</find>
+      <find>livev</find>
+      <find>mov</find>
+      <find>movq</find>
+      <find>addq</find>
+      <find>var</find>
+      <find>varmap</find>
+      <find>varlist</find>
+      <find>xp.v</find>
+      <find>xp.var</find>
+      <find>class if</find>
+      <find>tif</find>
+      <find>cif</find>
+      <find>jmp</find>
+      <find>xnw</find>
+      <find>xpopq</find>
+      <find>retq</find>
+      <find>xand</find>
+      <find>xc</find>
+      <find>jmpi</find>
       <find>comp</find>
-      <find>neg</find>
-      <find>CNeg</find>
-      <find>cbool</find>
-      <find>flatten</find>
-      <find>cpr</find>
-      <find>add</find>
-      <find>add(</find>
-      <find>class ad</find>
-      <find>let</find>
-      <find>clet</find>
-      <find>cst</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -538,13 +556,13 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/Transformer.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/DebugUtils.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Graph.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Main.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/X0.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Compiler.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/C0.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Graph.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/X0.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Lang.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/C0.kt" />
+        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
       </list>
     </option>
   </component>
@@ -645,7 +663,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.EvalTest.testLetTypeChecker">
+  <component name="RunManager" selected="JUnit.EvalTest.testCond">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
@@ -675,6 +693,26 @@
       <option name="MAIN_CLASS_NAME" value="EvalTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="EvalTest.iWantToDieTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="BasicCompiler_test" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="EvalTest" />
+      <option name="METHOD_NAME" value="iWantToDieTest" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -766,18 +804,6 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" value="MainKt" />
-      <option name="WORKING_DIRECTORY" />
-      <module name="BasicCompiler_main" />
-      <envs />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -819,19 +845,19 @@
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Kotlin.MainKt" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest.iWantToDieTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
-        <item index="4" class="java.lang.String" itemvalue="Kotlin.MainKt" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.EvalTest.testCond" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.EvalTest.iWantToDieTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.EvalTest.testAddNegLetVarNum" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.EvalTest.testLetTypeChecker" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.EvalTest" />
       </list>
     </recent_temporary>
   </component>
@@ -887,44 +913,44 @@
       <workItem from="1520183808237" duration="4273000" />
       <workItem from="1520198174446" duration="14678000" />
       <workItem from="1520219000018" duration="703000" />
-      <workItem from="1520446154152" duration="17950000" />
+      <workItem from="1520446154152" duration="45265000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="EvalTest - 2018.03.07 at 17h 14m 21s.xml">
-      <configuration name="EvalTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest - 2018.03.07 at 17h 41m 45s.xml">
-      <configuration name="EvalTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest - 2018.03.07 at 17h 43m 07s.xml">
-      <configuration name="EvalTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest - 2018.03.07 at 17h 43m 23s.xml">
-      <configuration name="EvalTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 05m 30s.xml">
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 12m 35s.xml">
       <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 13m 21s.xml">
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 19m 21s.xml">
       <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testCond - 2018.03.07 at 17h 14m 09s.xml">
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 22m 13s.xml">
       <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 09s.xml">
-      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 22m 49s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 21s.xml">
-      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 27m 17s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="EvalTest_testLetTypeChecker - 2018.03.07 at 17h 46m 23s.xml">
-      <configuration name="EvalTest.testLetTypeChecker" configurationId="JUnit" />
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 28m 23s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 28m 36s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 28m 43s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 33m 04s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EvalTest_testCond - 2018.03.08 at 13h 33m 42s.xml">
+      <configuration name="EvalTest.testCond" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123226000" />
+    <option name="totallyTimeSpent" value="150541000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -936,23 +962,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="868" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.49713877" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.495" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32864103" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769045" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20918985" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29020557" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22035734" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30024213" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29971388" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32897863" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292978" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1017,7 +1043,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1283,52 +1309,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.s" />
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Graph.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="33" column="8" lean-forward="false" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/X0.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3044">
-          <caret line="315" column="30" lean-forward="false" selection-start-line="315" selection-start-column="30" selection-end-line="315" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Compiler.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-313">
-          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/DebugUtils.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="99" column="4" lean-forward="false" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -1349,18 +1333,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Graph.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="38" column="7" lean-forward="false" selection-start-line="38" selection-start-column="7" selection-end-line="38" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Compiler.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="46" column="16" lean-forward="false" selection-start-line="46" selection-start-column="16" selection-end-line="46" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/X0.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="324" column="55" lean-forward="true" selection-start-line="324" selection-start-column="55" selection-end-line="324" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="203" column="43" lean-forward="false" selection-start-line="203" selection-start-column="43" selection-end-line="203" selection-end-column="43" />
+        <state relative-caret-position="430">
+          <caret line="304" column="42" lean-forward="false" selection-start-line="304" selection-start-column="42" selection-end-line="304" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/C0.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="41" column="8" lean-forward="true" selection-start-line="41" selection-start-column="8" selection-end-line="41" selection-end-column="8" />
+        <state relative-caret-position="244">
+          <caret line="69" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
           <folding />
         </state>
       </provider>
