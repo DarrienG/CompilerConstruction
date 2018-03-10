@@ -78,8 +78,8 @@ data class XRaw(private val x: String): Instruction {
 
 data class XAddq(private var al: XArg, private var ar: XArg): Instruction {
     override fun liveVars(liveVars: MutableSet<XArg>) {
-        if (al is XVar) liveVars.add(al); println("added a var $ar")
-        if (ar is XVar) liveVars.add(ar); println("added a var $al")
+        if (al is XVar) liveVars.add(al)
+        if (ar is XVar) liveVars.add(ar)
     }
 
     override fun emitFix(): Instruction? {
@@ -171,6 +171,11 @@ data class XXOrq(private var al: XArg, private var ar: XArg): Instruction {
             val movq = XMovq(al, XReg("rax"))
             al = XReg("rax")
             return movq
+        }
+        if (ar is XInt) {
+            val tmp = ar
+            ar = al
+            al = tmp
         }
         return null
     }

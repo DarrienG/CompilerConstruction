@@ -7,7 +7,6 @@ class Compiler() {
      */
     private fun i0(p: Program) = p.uniquify()
 
-
     /**
      * Flatten: Remove tree-like structure from program.
      * Will fail if program is not flattened.

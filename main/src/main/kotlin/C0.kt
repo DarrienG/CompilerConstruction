@@ -68,25 +68,24 @@ data class CComp(private val a: Argument, private val b: Argument, val type: Cmp
         val sentArgB = convertCArgToXArg(b)
         val dest = convertCArgToXArg(arg)
 
-        xp.instrList.add(XMovq(sentArgB, dest))
+        xp.instrList.add(XMovq(sentArgA, dest))
         when(type) {
             // These need a little extra love and care
             CmpType.OR -> {
-                xp.instrList.add(XAddq(sentArgA, dest))
+                xp.instrList.add(XAddq(sentArgB, dest))
                 xp.instrList.add(XCmpq(XInt(0), dest))
             }
             CmpType.NOT -> {
-                xp.instrList.add(XXOrq(sentArgA, dest))
+                xp.instrList.add(XXOrq(sentArgA, sentArgB))
                 xp.instrList.add(XCmpq(XInt(1), dest))
             }
-            else -> xp.instrList.add(XCmpq(sentArgA, dest))
+            else -> xp.instrList.add(XCmpq(sentArgB, dest))
         }
     }
 }
 
 data class CIf(private val labs: IfLabs, private val cc: CComp, private val tList: List<CStmt>, private val fList: List<CStmt>): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        cc.select(xp, arg)
         xp.instrList.add(XJmpIf(cc.type, labs.trueL))
         xp.instrList.add(XJmp(labs.falseL))
 
