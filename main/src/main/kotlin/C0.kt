@@ -102,6 +102,13 @@ data class CIf(private val labs: IfLabs, private val cc: CComp, private val tLis
     }
 }
 
+data class CMalloc(private val a: Argument): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
 data class CAdd(private val a: Argument, private val b: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
         val sentArgA = convertCArgToXArg(a)

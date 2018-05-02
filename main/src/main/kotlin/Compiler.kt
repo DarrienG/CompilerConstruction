@@ -8,10 +8,16 @@ class Compiler() {
     private fun i0(p: Program) = p.uniquify()
 
     /**
+     * Expose: Make vectors reveal what they truly are.
+     * A horrible, disgusting, malloc.
+     *
      * Flatten: Remove tree-like structure from program.
      * Will fail if program is not flattened.
      */
-    private fun i1(p: Program): CProgram =  p.flatten()
+    private fun i1(p: Program): CProgram {
+        p.expose()
+        return p.flatten()
+    }
 
     /**
      * Select: Convert CProgram [CProgram] to an accompanying XProgram [XProgram].
@@ -70,6 +76,7 @@ class Compiler() {
         } else {
             xProgram = i2(cProgram)
         }
+
         verbose?.let { println("\nSELECTED\n$xProgram") }
 
         if (timed != null) {

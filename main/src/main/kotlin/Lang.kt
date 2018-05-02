@@ -1,6 +1,7 @@
 enum class Type {
     INT,
-    BOOL;
+    BOOL,
+    VECTOR;
 }
 
 enum class CmpType {
@@ -18,6 +19,10 @@ enum class CmpType {
 }
 
 data class Bool(private val b: String): Comp(CmpType.AND, Num(1), Num(if (b == "t") 1 else 0)) {
+    override fun expose(): Expr {
+        return this
+    }
+
     private val t: Int = if (b == "t") 1 else 0
 
     override fun eval(env: HashMap<String, VarPair>): Int {
@@ -25,7 +30,73 @@ data class Bool(private val b: String): Comp(CmpType.AND, Num(1), Num(if (b == "
     }
 }
 
+private data class Malloc(val vr: List<VectorRef>): Expr {
+    override fun eval(env: HashMap<String, VarPair>): Any {
+        throw RuntimeException("Malloc is an internal API")
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        throw RuntimeException("Illegal call - Uniquify called out of order.")
+    }
+
+    // THIS SHOULD NEVER BE CALLED
+    override fun expose(): Expr {
+        throw RuntimeException("Malloc is an internal API")
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        val varList = hashSetOf<String>()
+        val stmtList = mutableListOf<CStmt>()
+        val cpList = mutableListOf<CProgram>()
+        val newVal = "malloc_${count.count}"
+        vr.forEach {
+            cpList.add(it.flatten(count))
+        }
+
+        varList.add(newVal)
+        stmtList.add(CStmt(CVar(newVal), CMalloc()))
+
+        cpList.forEach {
+            varList.addAll(it.varList)
+            stmtList.addAll(it.stmtList)
+        }
+        return CProgram(varList, stmtList)
+    }
+
+    override fun getType(): Type {
+        return Type.VECTOR
+    }
+}
+
+data class Vector(val datas: List<Expr>): Expr {
+    override fun expose(): Expr {
+        val vr = mutableListOf<VectorRef>()
+        for ((i, v) in datas.withIndex()) {
+            vr.add(VectorRef(this, i))
+        }
+        return Malloc(vr)
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Any {
+        return this
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        datas.forEach { it.uniquify(env, count) }
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        throw RuntimeException("You are a failure and you deserve to know. Call Expose before flatten!")
+    }
+
+    override fun getType(): Type = Type.VECTOR
+}
+
 data class Num(private val n: Int) : Expr {
+    override fun expose(): Expr {
+        return this
+    }
+
     override fun getType(): Type {
         return Type.INT
     }
@@ -43,7 +114,45 @@ data class Num(private val n: Int) : Expr {
     }
 }
 
+data class VectorRef(private val e: Expr, private val idx: Int): Expr {
+    override fun expose(): Expr {
+        return VectorRef(e.expose(), idx)
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        e.uniquify(env, count)
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        val cP = e.flatten(count)
+        val newVal = "vr_${count.count}"
+        count.count += 1
+        cP.varList.add(newVal)
+        TODO("Add CVecRef")
+//        cP.stmtList.add(CStmt(CVar(newVal), CVecRef(cP.arg)))
+        cP.arg = CVar(newVal)
+        return cP
+    }
+
+    override fun getType(): Type {
+        return e.getType()
+    }
+
+    override fun eval(env: HashMap<String, VarPair>): Any = when(e.getType()) {
+        Type.VECTOR -> {
+            val v = e.eval(env) as Vector
+            v.datas[idx].eval(env)
+        }
+        else -> throw RuntimeException("Attempting to reference values in non-vector")
+    }
+
+}
+
 data class Neg(private val e: Expr): Expr {
+    override fun expose(): Expr {
+        return Neg(e.expose())
+    }
+
     override fun getType(): Type {
         return Type.INT
     }
@@ -64,11 +173,15 @@ data class Neg(private val e: Expr): Expr {
 
     override fun eval(env: HashMap<String, VarPair>): Int {
         if (e.getType() != Type.INT) throw RuntimeException("Attempting to negate non-int")
-        return e.eval(env) * -1
+        return e.eval(env) as Int * -1
     }
 }
 
 data class Add(private val l: Expr, private val r: Expr): Expr {
+    override fun expose(): Expr {
+        return Add(l.expose(), r.expose())
+    }
+
     override fun getType(): Type {
         return Type.INT
     }
@@ -100,11 +213,15 @@ data class Add(private val l: Expr, private val r: Expr): Expr {
 
     override fun eval(env: HashMap<String, VarPair>): Int {
         weNumero(l, r)
-        return l.eval(env) + r.eval(env)
+        return l.eval(env) as Int + r.eval(env) as Int
     }
 }
 
 data class Let(private var x: String, private val xe: Expr, private val be: Expr) : Expr {
+    override fun expose(): Expr {
+        return Let(x, xe.expose(), be.expose())
+    }
+
     override fun getType(): Type {
         return xe.getType()
     }
@@ -136,13 +253,17 @@ data class Let(private var x: String, private val xe: Expr, private val be: Expr
         be.uniquify(env, count)
     }
 
-    override fun eval(env: HashMap<String, VarPair>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Any {
         env[x] = VarPair(xe.getType(), xe.eval(env))
         return be.eval(env)
     }
 }
 
 data class If(private val cc: Comp, private val trX: Expr, private val faX: Expr): Expr {
+    override fun expose(): Expr {
+        return If(cc.expose() as Comp, trX.expose(), faX.expose())
+    }
+
     override fun getType(): Type {
         val rT = trX.getType()
         val lT = faX.getType()
@@ -152,7 +273,7 @@ data class If(private val cc: Comp, private val trX: Expr, private val faX: Expr
         return rT
     }
 
-    override fun eval(env: HashMap<String, VarPair>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Any {
         val t = cc.getType()
         if (t != Type.BOOL) {
             throw RuntimeException("Attempting to evaluate non-bool type: $t")
@@ -229,6 +350,10 @@ data class Or(private val lx: Expr, private val rx: Expr): Comp(CmpType.OR, lx, 
 data class Not(private val e: Expr): Comp(CmpType.NOT, e, Num(1))
 
 open class Comp(val type: CmpType, private val lx: Expr, private val rx: Expr): Expr {
+    override fun expose(): Expr {
+        return this
+    }
+
     override fun getType(): Type {
         return Type.BOOL
     }
@@ -245,39 +370,39 @@ open class Comp(val type: CmpType, private val lx: Expr, private val rx: Expr): 
             }
             CmpType.GT -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) > rx.eval(env)) 1 else 0
+                if (lx.eval(env) as Int > rx.eval(env) as Int) 1 else 0
             }
             CmpType.LT -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) < rx.eval(env)) 1 else 0
+                if ((lx.eval(env) as Int) < rx.eval(env) as Int) 1 else 0
             }
             CmpType.GTE -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) >= rx.eval(env)) 1 else 0
+                if (lx.eval(env) as Int >= rx.eval(env) as Int) 1 else 0
             }
             CmpType.LTE -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) <= rx.eval(env)) 1 else 0
+                if (lx.eval(env) as Int <= rx.eval(env) as Int) 1 else 0
             }
             CmpType.ZER -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) + rx.eval(env) == 0) 1 else 0
+                if (lx.eval(env) as Int + rx.eval(env) as Int == 0) 1 else 0
             }
             CmpType.NZER -> {
                 weNumero(lx, rx)
-                if (lx.eval(env) + rx.eval(env) != 0) 1 else 0
+                if (lx.eval(env) as Int + rx.eval(env) as Int != 0) 1 else 0
             }
             CmpType.AND -> {
                 weBoolin(lx, rx)
-                if (lx.eval(env) + rx.eval(env) != 2) 1 else 0
+                if (lx.eval(env) as Int + rx.eval(env) as Int != 2) 1 else 0
             }
             CmpType.OR -> {
                 weBoolin(lx, rx)
-                if (lx.eval(env) + rx.eval(env) > 0) 1 else 0
+                if (lx.eval(env) as Int + rx.eval(env) as Int > 0) 1 else 0
             }
             CmpType.NOT -> {
                 if (lx.getType() != Type.BOOL) throw RuntimeException("Attempting to <NOT> a non-bool type")
-                lx.eval(env).xor(rx.eval(env))
+                (lx.eval(env) as Int).xor(rx.eval(env) as Int)
             }
         }
     }
@@ -310,6 +435,10 @@ open class Comp(val type: CmpType, private val lx: Expr, private val rx: Expr): 
 
 
 data class Var(private val t: Type, private var x: String) : Expr {
+    override fun expose(): Expr {
+        return this
+    }
+
     override fun getType(): Type {
         return t
     }
@@ -329,7 +458,7 @@ data class Var(private val t: Type, private var x: String) : Expr {
         throw RuntimeException("Syntax error, variable $x not defined before use")
     }
 
-    override fun eval(env: HashMap<String, VarPair>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Any {
         val value = env[x]
         value?.let {
             if (it.t != t) throw RuntimeException("Using incompatible type with variable")
@@ -346,6 +475,10 @@ data class Var(private val t: Type, private var x: String) : Expr {
 }
 
 class Read(private val t: Type): Expr {
+    override fun expose(): Expr {
+        return this
+    }
+
     override fun getType(): Type {
         return t
     }
@@ -370,6 +503,10 @@ class Read(private val t: Type): Expr {
 }
 
 class Write(private var x: Expr) : Expr {
+    override fun expose(): Expr {
+        return this
+    }
+
     override fun getType(): Type {
         return x.getType()
     }
@@ -385,7 +522,7 @@ class Write(private var x: Expr) : Expr {
         return
     }
 
-    override fun eval(env: HashMap<String, VarPair>): Int {
+    override fun eval(env: HashMap<String, VarPair>): Any {
         val value = x.eval(env)
         println(value)
         return value
@@ -396,11 +533,12 @@ class Write(private var x: Expr) : Expr {
     }
 }
 
-data class VarPair(val t: Type, val v: Int)
+data class VarPair(val t: Type, val v: Any)
 
 interface Expr {
-    fun eval(env: HashMap<String, VarPair>): Int
+    fun eval(env: HashMap<String, VarPair>): Any
     fun uniquify(env: HashMap<String, String>, count: Counter)
+    fun expose(): Expr
     fun flatten(count: Counter): CProgram
     fun getType(): Type
 }
@@ -408,6 +546,10 @@ interface Expr {
 data class Program(val e: Expr) {
     fun uniquify() {
         e.uniquify(hashMapOf(), Counter(0))
+    }
+
+    fun expose() {
+        e.expose()
     }
 
     fun flatten(): CProgram {
