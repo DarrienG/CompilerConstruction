@@ -108,12 +108,13 @@ class EvalTest {
     @Test
     fun testVecInterp() {
         val p = Program(Let("bubber", Vector(
-                listOf(Num(1),
+                mutableListOf(Num(1),
                         Neg(Num(2)),
                         Bool("t"),
                         Add(Num(2), Num(3)))
         ),
-                Add(VectorRef(Var(Type.VECTOR, "bubber"), 3), Num(4))))
+                Add(VectorRef(Var(Type.VECTOR, "bubber"), Num(3)), Num(4))))
         assert(interpP(p) == 9)
+        Compiler().compile(p)
     }
 }

@@ -1,5 +1,11 @@
 interface XArg
 
+data class XType(private val t: Type): XArg {
+    override fun toString(): String {
+        return t.toString()
+    }
+}
+
 data class XInt(private val x: Int): XArg {
     override fun toString(): String {
         return "\$$x"
@@ -306,6 +312,28 @@ data class XCallq(private var a: XLabel): Instruction {
 
     override fun toString(): String {
         return "callq\t$a\n"
+    }
+
+    fun emitFullInstrSet(): List<Instruction> {
+        return listOf(
+                XPushq(XReg("rcx")),
+                XPushq(XReg("rdx")),
+                XPushq(XReg("rsi")),
+                XPushq(XReg("rdi")),
+                XPushq(XReg("r8")),
+                XPushq(XReg("r9")),
+                XPushq(XReg("r10")),
+                XPushq(XReg("r11")),
+                this,
+                XPopq(XReg("r11")),
+                XPopq(XReg("r10")),
+                XPopq(XReg("r9")),
+                XPopq(XReg("r8")),
+                XPopq(XReg("rdi")),
+                XPopq(XReg("rsi")),
+                XPopq(XReg("rdx")),
+                XPopq(XReg("rcx"))
+        )
     }
 }
 

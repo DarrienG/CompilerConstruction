@@ -118,7 +118,7 @@ int64_t* gc_copy(int64_t** from_free_ptr, int64_t* object) {
     int64_t i;
 
     if (roundpd(((int64_t)*from_free_ptr)) == roundpd((int64_t)object)){
-       return object; 
+        return object; 
     }
 
     if(object[0] == TAG_INT || object[0] == TAG_BOOL) {

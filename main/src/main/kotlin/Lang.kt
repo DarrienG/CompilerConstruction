@@ -30,7 +30,7 @@ data class Bool(private val b: String): Comp(CmpType.AND, Num(1), Num(if (b == "
     }
 }
 
-private data class Malloc(val vr: List<VectorRef>): Expr {
+private data class Malloc(val vr: List<VectorSet>): Expr {
     override fun eval(env: HashMap<String, VarPair>): Any {
         throw RuntimeException("Malloc is an internal API")
     }
@@ -49,18 +49,22 @@ private data class Malloc(val vr: List<VectorRef>): Expr {
         val stmtList = mutableListOf<CStmt>()
         val cpList = mutableListOf<CProgram>()
         val newVal = "malloc_${count.count}"
+        count.count += 1
         vr.forEach {
             cpList.add(it.flatten(count))
         }
 
         varList.add(newVal)
-        stmtList.add(CStmt(CVar(newVal), CMalloc()))
+
+        val arg = CNum(vr.size)
+
+        stmtList.add(CStmt(CVar(newVal), CMalloc(arg)))
 
         cpList.forEach {
             varList.addAll(it.varList)
             stmtList.addAll(it.stmtList)
         }
-        return CProgram(varList, stmtList)
+        return CProgram(varList, stmtList, arg)
     }
 
     override fun getType(): Type {
@@ -68,13 +72,13 @@ private data class Malloc(val vr: List<VectorRef>): Expr {
     }
 }
 
-data class Vector(val datas: List<Expr>): Expr {
+data class Vector(val datas: MutableList<Expr>): Expr {
     override fun expose(): Expr {
-        val vr = mutableListOf<VectorRef>()
-        for ((i, v) in datas.withIndex()) {
-            vr.add(VectorRef(this, i))
+        val vs = mutableListOf<VectorSet>()
+        for ((i, _) in datas.withIndex()) {
+            vs.add(VectorSet(this, datas[i], Num(i)))
         }
-        return Malloc(vr)
+        return Malloc(vs)
     }
 
     override fun eval(env: HashMap<String, VarPair>): Any {
@@ -112,9 +116,55 @@ data class Num(private val n: Int) : Expr {
     override fun eval(env: HashMap<String, VarPair>): Int {
         return n
     }
+
+    fun getRaw(): Int = n
 }
 
-data class VectorRef(private val e: Expr, private val idx: Int): Expr {
+data class VectorSet(private val v: Expr, private val ins: Expr, private val idx: Num): Expr {
+    override fun eval(env: HashMap<String, VarPair>): Any {
+        (v as Vector).datas[idx.eval(env)] = ins
+        return v
+    }
+
+    override fun uniquify(env: HashMap<String, String>, count: Counter) {
+        v.uniquify(env, count)
+        ins.uniquify(env, count)
+        idx.uniquify(env, count)
+    }
+
+    override fun expose(): Expr {
+        return VectorSet(v.expose(), ins.expose(), idx.expose() as Num)
+    }
+
+    override fun flatten(count: Counter): CProgram {
+        val cpV = v.flatten(count)
+        val cpI = ins.flatten(count)
+        val cpIdx = idx.flatten(count)
+
+        val newVal = "vset_${count.count}"
+        count.count += 1
+
+        val varList = hashSetOf<String>()
+        val stmtList = mutableListOf<CStmt>()
+        varList.add(newVal)
+        stmtList.add(CStmt(CVar(newVal), CVecSet(cpI.arg, cpIdx.arg)))
+
+        varList.addAll(cpI.varList)
+        stmtList.addAll(cpI.stmtList)
+
+        varList.addAll(cpIdx.varList)
+        stmtList.addAll(cpIdx.stmtList)
+
+        return CProgram(varList, stmtList, cpV.arg)
+    }
+
+    override fun getType(): Type {
+        return ins.getType()
+    }
+
+}
+
+data class VectorRef(private val e: Expr, private val idx: Num): Expr {
     override fun expose(): Expr {
         return VectorRef(e.expose(), idx)
     }
@@ -124,13 +174,13 @@ data class VectorRef(private val e: Expr, private val idx: Int): Expr {
     }
 
     override fun flatten(count: Counter): CProgram {
-        val cP = e.flatten(count)
-        val newVal = "vr_${count.count}"
+        val ve = (e as Vector).datas[idx.getRaw()]
+        val cP = ve.flatten(count)
+        val newVal = "vref_${count.count}"
         count.count += 1
         cP.varList.add(newVal)
-        TODO("Add CVecRef")
-//        cP.stmtList.add(CStmt(CVar(newVal), CVecRef(cP.arg)))
-        cP.arg = CVar(newVal)
+        cP.stmtList.add(CStmt(CVar(newVal), CVecRef(CType(ve.getType()))))
+        cP.arg = CNum(idx.getRaw())
         return cP
     }
 
@@ -141,7 +191,7 @@ data class VectorRef(private val e: Expr, private val idx: Int): Expr {
     override fun eval(env: HashMap<String, VarPair>): Any = when(e.getType()) {
         Type.VECTOR -> {
             val v = e.eval(env) as Vector
-            v.datas[idx].eval(env)
+            v.datas[idx.getRaw()].eval(env)
         }
         else -> throw RuntimeException("Attempting to reference values in non-vector")
     }

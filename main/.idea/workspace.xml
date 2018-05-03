@@ -52,34 +52,17 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="Lang.kt" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="253">
-                  <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="C0.kt" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/main/kotlin/C0.kt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="409">
-                  <caret line="29" column="51" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="51" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="Lang.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="334">
+              <caret line="605" selection-start-line="605" selection-end-line="605" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -90,29 +73,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>comp</find>
-      <find>assi</find>
-      <find>movq</find>
-      <find>cmpq</find>
-      <find>added a var</find>
-      <find>var</find>
-      <find>class le</find>
-      <find>class var</find>
-      <find>interface</find>
-      <find>convv</find>
-      <find>class if</find>
-      <find>fuc</find>
-      <find>cif</find>
-      <find>varpa</find>
-      <find>varpair</find>
-      <find>vectorref</find>
-      <find>vector</find>
-      <find>if(</find>
       <find>let</find>
-      <find>neg</find>
       <find>expr</find>
       <find>e</find>
-      <find>vectorre</find>
       <find>malloc</find>
       <find>if</find>
       <find>cstmt</find>
@@ -120,6 +83,26 @@
       <find>stmtlist.add</find>
       <find>cst</find>
       <find>argument</find>
+      <find>if(</find>
+      <find>vector</find>
+      <find>vectorreg</find>
+      <find>cv</find>
+      <find>cmallow</find>
+      <find>vectorse</find>
+      <find>vectorref</find>
+      <find>vectorset</find>
+      <find>cmallo</find>
+      <find>neg</find>
+      <find>whe</find>
+      <find>hashsetof</find>
+      <find>vectorre</find>
+      <find>cneg</find>
+      <find>cadd</find>
+      <find>xcallq</find>
+      <find>callq</find>
+      <find>ve</find>
+      <find>cmalloc</find>
+      <find>cvecre</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -553,12 +536,12 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/DebugUtils.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Graph.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/X0.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Main.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Compiler.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/C0.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Lang.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/X0.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/C0.kt" />
+        <option value="$PROJECT_DIR$/src/test/kotlin/EvalTest.kt" />
       </list>
     </option>
   </component>
@@ -572,8 +555,9 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="18" />
     <option name="width" value="800" />
-    <option name="height" value="881" />
+    <option name="height" value="863" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -873,9 +857,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="EvalTest_testAddNegLetVarNum - 2018.03.08 at 14h 30m 23s.xml">
-      <configuration name="EvalTest.testAddNegLetVarNum" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="EvalTest_testAddNegLetVarNum - 2018.03.08 at 15h 27m 32s.xml">
       <configuration name="EvalTest.testAddNegLetVarNum" configurationId="JUnit" />
     </history-entry>
@@ -903,6 +884,9 @@
     <history-entry file="EvalTest_testVecInterp - 2018.05.02 at 13h 47m 26s.xml">
       <configuration name="EvalTest.testVecInterp" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="EvalTest_testVecInterp - 2018.05.02 at 22h 32m 51s.xml">
+      <configuration name="EvalTest.testVecInterp" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="159480000" />
@@ -926,7 +910,7 @@
       <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49420848" weight="0.32677165" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5006435" side_tool="true" weight="0.35564303" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993565" weight="0.29002625" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993565" weight="0.49868765" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Gradle" order="7" weight="0.3292978" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -969,14 +953,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt</url>
-          <line>109</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="9" />
     </breakpoint-manager>
   </component>
@@ -985,6 +961,13 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2265">
+          <caret line="151" column="19" selection-start-line="151" selection-start-column="19" selection-end-line="151" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -1185,24 +1168,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/X0.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2.41/dc11619be6c45157a142d3753017544896da8e69/kotlin-stdlib-1.2.41-sources.jar!/kotlin/collections/Collections.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
           <caret line="108" column="22" selection-start-line="108" selection-start-column="22" selection-end-line="108" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="109" selection-start-line="109" selection-end-line="109" />
         </state>
       </provider>
     </entry>
@@ -1213,24 +1182,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Compiler.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/X0.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
+        <state relative-caret-position="238">
+          <caret line="317" column="21" selection-start-line="317" selection-start-column="21" selection-end-line="317" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/C0.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="29" column="51" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="51" />
+        <state relative-caret-position="364">
+          <caret line="127" column="43" selection-start-line="127" selection-start-column="43" selection-end-line="127" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/EvalTest.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="117" column="19" selection-start-line="117" selection-start-column="19" selection-end-line="117" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Compiler.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Lang.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="605" selection-start-line="605" selection-end-line="605" />
         </state>
       </provider>
     </entry>

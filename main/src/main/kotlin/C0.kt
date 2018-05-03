@@ -5,6 +5,13 @@ interface CExpr {
     fun select(xp: XProgram, arg: Argument)
 }
 
+data class CType(private val t: Type): Argument {
+    override fun getVal(): Any {
+        return t
+    }
+
+}
+
 data class CNum(private val n: Int = 314159): Argument {
     override fun getVal(): Any {
         return n
@@ -104,9 +111,27 @@ data class CIf(private val labs: IfLabs, private val cc: CComp, private val tLis
 
 data class CMalloc(private val a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        xp.instrList.addAll(XCallq(XLabel("gc_malloc")).emitFullInstrSet())
     }
+}
 
+data class CVecRef(private val a: Argument): CExpr {
+    // TODO: This whole thing is wrong
+    override fun select(xp: XProgram, arg: Argument) {
+        // TODO: This is wrong - a is currently a type and should be something else
+        // Technically they should both be movq, but the arguments are fucked up
+        xp.instrList.add(XMovq(convertCArgToXArg(a), XReg("rax")))
+        xp.instrList.add(XMovq(XOffset(XReg("rax"), 8 * arg.getVal() as Int), XReg("rax")))
+    }
+}
+
+data class CVecSet(private val value: Argument, private val idx: Argument): CExpr {
+    override fun select(xp: XProgram, arg: Argument) {
+        xp.instrList.add(XMovq(convertCArgToXArg(value), XOffset(XReg("rax"), 8 * idx.getVal() as Int)))
+        xp.instrList.add(XMovq(convertCArgToXArg(value), XReg("rax")))
+        // r15???????????????? What the fuck
+        xp.instrList.add(XMovq(XReg("r15"), XOffset(XReg("rax"), 8 * idx.getVal() as Int)))
+    }
 }
 
 data class CAdd(private val a: Argument, private val b: Argument): CExpr {
@@ -121,7 +146,7 @@ data class CAdd(private val a: Argument, private val b: Argument): CExpr {
 
 class CRead: CExpr {
     override fun select(xp: XProgram, arg: Argument) {
-        xp.instrList.add(XCallq(XLabel("_read")))
+        xp.instrList.addAll(XCallq(XLabel("_read")).emitFullInstrSet())
         xp.instrList.add(XMovq(XReg("rax"), convertCArgToXArg(arg)))
     }
 }
@@ -130,7 +155,7 @@ data class CWrite(private val a: Argument): CExpr {
     override fun select(xp: XProgram, arg: Argument) {
         val sentArg = convertCArgToXArg(a)
         xp.instrList.add(XMovq(sentArg, XReg("rdi")))
-        xp.instrList.add(XCallq(XLabel("_print")))
+        xp.instrList.addAll(XCallq(XLabel("_print")).emitFullInstrSet())
     }
 }
 
